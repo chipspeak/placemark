@@ -6,7 +6,7 @@ const placemarkSchema = new Schema({
   title: String,
   artist: String,
   duration: Number,
-  categoryid: {
+  categoryId: {
     type: Schema.Types.ObjectId,
     ref: "Category",
   },
