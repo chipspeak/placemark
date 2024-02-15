@@ -1,5 +1,5 @@
 import { Placemark } from "./placemark.js";
-import { Category } from "./category.js";
+import { User } from "./user.js";
 
 export const placemarkMongoStore = {
   async getAllPlacemarks() {
@@ -7,18 +7,18 @@ export const placemarkMongoStore = {
     return placemarks;
   },
 
-  async addPlacemark(categoryId, placemark) {
-    placemark.categoryId = categoryId;
+  async addPlacemark(userId, placemark) {
+    placemark.userId = userId; // Associate placemark with user
     const newPlacemark = new Placemark(placemark);
     const placemarkObj = await newPlacemark.save();
-    return this.getPlacemarkById(placemarkObj._id);
+    return placemarkObj;
   },
-
-  async getPlacemarksByCategoryId(id) {
-    const placemarks = await Placemark.find({ categoryId: id }).lean();
+  
+  async getPlacemarksByUserId(userId) {
+    const placemarks = await Placemark.find({ userId }).lean();
     return placemarks;
   },
-
+  
   async getPlacemarkById(id) {
     if (id) {
       const placemark = await Placemark.findOne({ _id: id }).lean();

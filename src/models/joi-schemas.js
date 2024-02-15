@@ -14,10 +14,9 @@ export const UserCredsSpec = {
 
 export const PlacemarkSpec = {
   title: Joi.string().required(),
-  artist: Joi.string().required(),
-  duration: Joi.number().allow("").optional(),
-};
-
-export const CategorySpec = {
-  title: Joi.string().required(),
+  description: Joi.string().max(200).required(),
+  location: Joi.string().required(),
+  latitude: Joi.string().required(),
+  longitude: Joi.string().required(),
+  category: Joi.string().required(),
 };

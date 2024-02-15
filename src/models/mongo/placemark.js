@@ -4,11 +4,14 @@ const { Schema } = Mongoose;
 
 const placemarkSchema = new Schema({
   title: String,
-  artist: String,
-  duration: Number,
-  categoryId: {
+  description: String,
+  location: String,
+  latitude: String,
+  longitude: String,
+  category: String,
+  userId: {
     type: Schema.Types.ObjectId,
-    ref: "Category",
+    ref: "User",
   },
 });
 

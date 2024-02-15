@@ -1,16 +1,17 @@
-<nav class="navbar">
-  <div class="navbar-brand">
-    {{> placemark-brand}}
-  </div>
-  <div class="navbar-menu" id="navMenu">
+{{> placemark-brand}}
+<div id="navMenu" class="pt-5 navbar-menu">
+  <div class="navbar-menu is-hoverable">
     <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="buttons">
-          <a id="dashboard" class="button" href="/dashboard"> Dashboard </a>
-          <a id="about" class="button" href="/about"> About </a>
-          <a id="logout" class="button" href="/logout"> Logout </a>
-        </div>
-      </div>
+      <a id="dashboard" class="button is-success is-outlined mx-2 is-size-5" href="/dashboard">Dashboard<i
+          class="fa-solid fa-house-chimney-user pl-2"></i></a>
+      <a id="about" class="button is-success is-outlined mx-2 is-size-5" href="/about">About<i
+          class="fa-solid fa-address-card pl-2"></i></a>
+      <a id="logout" class="button is-success mx-2 is-outlined is-size-5" href="/logout">Logout<i
+          class="fa-solid fa-right-from-bracket pl-2"></i></a>
     </div>
   </div>
-</nav>
+</div>
+<script>
+  document.getElementById("{{active}}").classList.add("is-focused");
+</script>
+<br>

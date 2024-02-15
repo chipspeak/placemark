@@ -7,47 +7,33 @@ export const placemarkMemStore = {
     return placemarks;
   },
 
-  async addPlacemark(categoryId, placemark) {
+  async addPlacemark(userId, placemark) {
     placemark._id = v4();
-    placemark.categoryId = categoryId;
+    placemark.userId = userId;
     placemarks.push(placemark);
     return placemark;
   },
 
-  async getPlacemarksByCategoryId(id) {
-    return placemarks.filter((placemark) => placemark.categoryId === id);
+  async getPlacemarksByUserId(userId) {
+    return placemarks.filter((placemark) => placemark.userId === userId);
   },
 
   async getPlacemarkById(id) {
-    let foundPlacemark = placemarks.find((placemark) => placemark._id === id);
-    if (!foundPlacemark) {
-      foundPlacemark = null;
-    }
-    return  foundPlacemark;
-  },
-
-  async getCategoryPlacemarks(categoryId) {
-    let foundPlacemarks = placemarks.filter((placemark) => placemark.categoryId === categoryId);
-    if (!foundPlacemarks) {
-      foundPlacemarks = null;
-    }
-    return foundPlacemarks;
+    return placemarks.find((placemark) => placemark._id === id) || null;
   },
 
   async deletePlacemark(id) {
-    const index = placemarks.findIndex((placemark) => placemark._id === id);
-    if (index !== -1) placemarks.splice(index, 1);
+    placemarks = placemarks.filter((placemark) => placemark._id !== id);
   },
 
   async deleteAllPlacemarks() {
     placemarks = [];
   },
 
-  /*
-  async updateTrack(track, updatedTrack) {
-    track.title = updatedTrack.title;
-    track.artist = updatedTrack.artist;
-    track.duration = updatedTrack.duration;
+  async updatePlacemark(placemarkId, updatedPlacemark) {
+    const index = placemarks.findIndex((placemark) => placemark._id === placemarkId);
+    if (index !== -1) {
+      placemarks[index] = { ...placemarks[index], ...updatedPlacemark };
+    }
   },
-  */
 };

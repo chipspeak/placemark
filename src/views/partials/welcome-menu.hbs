@@ -1,19 +1,14 @@
-<nav class="navbar" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    {{> placemark-brand}}
-  </div>
-  <div id="navbarBasicExample" class="navbar-menu">
+{{>placemark-brand}}
+<br>
+<nav class="navbar is-transparent">
+  <div class="navbar-menu is-hoverable">
     <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="buttons">
-          <a class="button" id="login" href="/login"> Log in </a> <a class="button" id="signup" href="/signup"> Sign
-          up </a>
-        </div>
-      </div>
+      <a id="signup" class="button is-success mx-2 is-size-5 is-outlined" href="/signup">Signup<i class="fa-solid fa-user-plus pl-2"></i></a>
+      <a id="login" class="button is-success mx-2 is-size-5 is-outlined" href="/login">Login<i class="fa-solid fa-users pl-2"></i></a>
     </div>
   </div>
 </nav>
-
 <script>
-  document.getElementById("{{active}}").classList.add("is-primary");
+  document.getElementById("{{active}}").classList.add("is-focused");
 </script>
+<br>
