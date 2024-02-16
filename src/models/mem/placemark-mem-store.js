@@ -33,7 +33,12 @@ export const placemarkMemStore = {
   async updatePlacemark(placemarkId, updatedPlacemark) {
     const index = placemarks.findIndex((placemark) => placemark._id === placemarkId);
     if (index !== -1) {
-      placemarks[index] = { ...placemarks[index], ...updatedPlacemark };
+      placemarks[index].title = updatedPlacemark.title;
+      placemarks[index].description = updatedPlacemark.description;
+      placemarks[index].location = updatedPlacemark.location;
+      placemarks[index].latitude = updatedPlacemark.latitude;
+      placemarks[index].longitude = updatedPlacemark.longitude;
+      placemarks[index].category = updatedPlacemark.category;
     }
-  },
+  } 
 };

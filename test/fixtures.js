@@ -72,7 +72,7 @@ export const testPlacemarks = [
   },
   {
     "title" : "Woodstown Beach ",
-    "description" : "Beautiful beach in county waterford on the way to Dunmore. Nice spot for walking the dog. About 3km both ways.",
+    "description" : "Beautiful beach in county waterford on the way to Dunmore. Nice spot for walking the dog. About 2kms both ways.",
     "location" : "Woodstown, County Waterford",
     "latitude" : "40.30858770",
     "longitude" : "-2.1686",

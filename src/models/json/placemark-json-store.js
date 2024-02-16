@@ -38,16 +38,14 @@ export const placemarkJsonStore = {
     await db.write();
   },
 
-  async updatePlacemark(placemark, updatedPlacemark) {
-    placemark.title = updatedPlacemark.title;
-    placemark.artist = updatedPlacemark.artist;
-    placemark.duration = updatedPlacemark.duration;
-    placemark.title = updatedPlacemark.title;
-    placemark.description = updatedPlacemark.description;
-    placemark.location = updatedPlacemark.location;
-    placemark.latitude = updatedPlacemark.latitude;
-    placemark.longitude = updatedPlacemark.longitude;
-    placemark.category = updatedPlacemark.category;
+  async updatePlacemark(placemarkId, updatedPlacemark) {
+    const retrievedPlacemark = await db.getPlacemarkById(placemarkId);
+    retrievedPlacemark.title = updatedPlacemark.title;
+    retrievedPlacemark.description = updatedPlacemark.description;
+    retrievedPlacemark.location = updatedPlacemark.location;
+    retrievedPlacemark.latitude = updatedPlacemark.latitude;
+    retrievedPlacemark.longitude = updatedPlacemark.longitude;
+    retrievedPlacemark.category = updatedPlacemark.category;
     await db.write();
   },
 };

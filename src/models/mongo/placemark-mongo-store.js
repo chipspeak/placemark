@@ -8,7 +8,7 @@ export const placemarkMongoStore = {
   },
 
   async addPlacemark(userId, placemark) {
-    placemark.userId = userId; // Associate placemark with user
+    placemark.userId = userId;
     const newPlacemark = new Placemark(placemark);
     const placemarkObj = await newPlacemark.save();
     return placemarkObj;
@@ -39,11 +39,14 @@ export const placemarkMongoStore = {
     await Placemark.deleteMany({});
   },
 
-  async updatePlacemark(placemark, updatedPlacemark) {
-    const placemarkDoc = await Placemark.findOne({ _id: placemark._id });
-    placemarkDoc.title = updatedPlacemark.title;
-    placemarkDoc.description = updatedPlacemark.description;
-    placemarkDoc.location = updatedPlacemark.location;
-    await placemarkDoc.save();
+  async updatePlacemark(placemarkId, updatedPlacemark) {
+    const retrievedPlacemark = await Placemark.findOne({ _id: placemarkId });
+    retrievedPlacemark.title = updatedPlacemark.title;
+    retrievedPlacemark.description = updatedPlacemark.description;
+    retrievedPlacemark.location = updatedPlacemark.location;
+    retrievedPlacemark.latitude = updatedPlacemark.latitude;
+    retrievedPlacemark.longitude = updatedPlacemark.longitude;
+    retrievedPlacemark.category = updatedPlacemark.category;
+    await retrievedPlacemark.save();
   },
 };

@@ -39,12 +39,48 @@ export const dashboardController = {
     },
   },
 
+  updatePlacemark: {
+    validate: {
+      payload: PlacemarkSpec,
+      options: { abortEarly: false },
+      failAction: async function (request, h, error) {
+        const placemarkId = request.params.id;
+        const oldPlacemark = await db.placemarkStore.getPlacemarkById(placemarkId);
+        return h.view("update-placemark", {
+          title: "Update Placemark",
+          placemark: oldPlacemark,
+          errors: error.details
+        }).takeover().code(400);
+      },
+    },
+    handler: async function (request, h) {
+      const oldPlacemark = await db.placemarkStore.getPlacemarkById(request.params.id);
+      const updatedPlacemark = {
+        title: request.payload.title,
+        description: request.payload.description,
+        location: request.payload.location,
+        latitude: request.payload.latitude,
+        longitude: request.payload.longitude,
+        category: request.payload.category,
+      };
+      await db.placemarkStore.updatePlacemark(oldPlacemark._id, updatedPlacemark);
+      return h.redirect("/dashboard");
+    },
+  },
+
+  showUpdatePlacemarkForm: {
+    handler: async function (request, h) {
+      const placemarkId = request.params.id;
+      const placemark = await db.placemarkStore.getPlacemarkById(placemarkId);
+      return h.view("update-placemark", { placemark });
+    },
+  },
+
   deletePlacemark: {
     handler: async function (request, h) {
       const placemarkId = request.params.id;
-      // Implement logic to delete the placemark with the given ID from the database
       await db.placemarkStore.deletePlacemark(placemarkId);
-      return h.redirect("/dashboard"); // Redirect to the dashboard after deletion
+      return h.redirect("/dashboard");
     },
   },  
 };
