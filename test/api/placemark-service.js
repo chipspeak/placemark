@@ -1,5 +1,5 @@
+/* eslint-disable dot-notation */
 import axios from "axios";
-
 import { serviceUrl } from "../fixtures.js";
 
 export const placemarkService = {
@@ -15,6 +15,18 @@ export const placemarkService = {
     return res.data;
   },
 
+  async authenticate(user) {
+    const response = await axios.post(`${this.placemarkUrl}/api/users/authenticate`, user);
+    // eslint-disable-next-line prefer-template
+    // axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.token;
+    axios.defaults.headers.common["Authorization"] = response.data.token;
+    return response.data;
+  },
+
+  async clearAuth() {
+    axios.defaults.headers.common["Authorization"] = "";
+  },
+
   async getAllUsers() {
     const res = await axios.get(`${this.placemarkUrl}/api/users`);
     return res.data;
@@ -25,8 +37,8 @@ export const placemarkService = {
     return res.data;
   },
 
-  async createPlacemark(userId, placemark) {
-    const res = await axios.post(`${this.placemarkUrl}/api/users/${userId}/placemarks`, placemark);
+  async createPlacemark(placemark) {
+    const res = await axios.post(`${this.placemarkUrl}/api/users/placemarks`, placemark);
     return res.data;
   },
 

@@ -17,4 +17,6 @@ export const webRoutes = [
   { method: "GET", path: "/dashboard/deleteplacemark/{id}", config: dashboardController.deletePlacemark },
   { method: "GET", path: "/dashboard/updateplacemark/{id}", config: dashboardController.showUpdatePlacemarkForm },
   { method: "POST", path: "/dashboard/updateplacemark/{id}", config: dashboardController.updatePlacemark },
+  
+  { method: "GET", path: "/{param*}", handler: { directory: { path: "./public" } }, options: { auth: false } }
 ];
