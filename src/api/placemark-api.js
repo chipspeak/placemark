@@ -90,8 +90,6 @@ export const placemarkApi = {
     response: { schema: PlacemarkPlusSpec, failAction: validationError },
   },
   
-  
-
   deleteAll: {
     auth: {
       strategy: "jwt",
@@ -128,4 +126,55 @@ export const placemarkApi = {
     description: "Delete a placemark",
     validate: { params: { id: IdSpec }, failAction: validationError },
   },
+
+  // Update a placemark
+update: {
+  auth: {
+    strategy: "jwt",
+  },
+  handler: async function (request, h) {
+    try {
+      // Decode and validate the JWT token
+      const decodedToken = decodeToken(request.headers.authorization);
+      const validationResult = await validate(decodedToken, request);
+      if (!validationResult.isValid) {
+        return Boom.unauthorized("Invalid credentials");
+      }
+      
+      // Access user ID from decoded payload
+      // eslint-disable-next-line prefer-destructuring
+      const userId = decodedToken.userId;
+      
+      // Access updated placemark data from request payload
+      const updatedPlacemark = request.payload;
+      
+      // Add userId to the updated placemark data
+      updatedPlacemark.userId = userId;
+      
+      // Proceed with updating the placemark
+      const placemarkId = request.params.id;
+      const result = await db.placemarkStore.updatePlacemark(placemarkId, updatedPlacemark);
+      
+      if (result) {
+        const resultObject = result.toObject();
+        console.log("Below is the updated placemark");
+        console.log(resultObject)
+        return h.response(resultObject).code(200);
+      }
+      return Boom.badImplementation("Error updating placemark");
+
+    } catch (error) {
+      console.error(error);
+      return Boom.badImplementation("Error updating placemark");
+    }
+  },
+  tags: ["api"],
+  description: "Update a Placemark",
+  notes: "Updates an existing placemark",
+  validate: {
+    params: { id: IdSpec },
+    payload: PlacemarkSpec // Specify the schema for the request payload
+  },
+  response: { emptyStatusCode: 204, failAction: validationError },
+},
 };

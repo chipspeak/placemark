@@ -15,6 +15,11 @@ export const placemarkService = {
     return res.data;
   },
 
+  async updateUser(id) {
+    const res = await axios.put(`${this.placemarkUrl}/api/users/${id}`);
+    return res.data;
+  },
+
   async authenticate(user) {
     const response = await axios.post(`${this.placemarkUrl}/api/users/authenticate`, user);
     // eslint-disable-next-line prefer-template
@@ -44,6 +49,11 @@ export const placemarkService = {
 
   async getPlacemark(id) {
     const res = await axios.get(`${this.placemarkUrl}/api/placemarks/${id}`);
+    return res.data;
+  },
+
+  async updatePlacemark(id, updatedPlacemark) {
+    const res = await axios.put(`${this.placemarkUrl}/api/placemarks/${id}`, updatedPlacemark);
     return res.data;
   },
 

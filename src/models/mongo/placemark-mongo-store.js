@@ -47,6 +47,7 @@ export const placemarkMongoStore = {
     retrievedPlacemark.latitude = updatedPlacemark.latitude;
     retrievedPlacemark.longitude = updatedPlacemark.longitude;
     retrievedPlacemark.category = updatedPlacemark.category;
-    await retrievedPlacemark.save();
+    const updatedPlacemarkObject = await retrievedPlacemark.save();
+    return updatedPlacemarkObject;
   },
 };

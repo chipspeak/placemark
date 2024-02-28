@@ -2,7 +2,7 @@ import Boom from "@hapi/boom";
 import { db } from "../models/db.js";
 import { UserSpec, UserSpecPlus, IdSpec, UserArray, JwtAuth, UserCredsSpec } from "../models/joi-schemas.js";
 import { validationError } from "./logger.js";
-import { createToken } from "./jwt-utils.js";
+import { createToken, validate, decodeToken } from "./jwt-utils.js";
 
 export const userApi = {
   find: {
@@ -64,6 +64,46 @@ export const userApi = {
     validate: { payload: UserSpec, failAction: validationError },
     response: { schema: UserSpecPlus, failAction: validationError },
   },
+
+  update: {
+    auth: {
+      strategy: "jwt",
+    },
+    handler: async function (request, h) {
+      try {
+        // Decode and validate the JWT token
+        const decodedToken = decodeToken(request.headers.authorization);
+        const validationResult = await validate(decodedToken, request);
+        if (!validationResult.isValid) {
+          return Boom.unauthorized("Invalid credentials");
+        }
+
+        console.log("validated");
+        
+        // eslint-disable-next-line prefer-destructuring
+        const userId = decodedToken.userId;
+        
+        const updatedUser = request.payload;
+        console.log(request.payload)
+        console.log(userId)
+        const result = await db.userStore.updateUser(userId, updatedUser);
+
+        const resultObject = result.toObject();
+        console.log("Below is the updated user");
+        console.log(resultObject)
+        return h.response(resultObject).code(200);
+
+      } catch (err) {
+        return Boom.serverUnavailable("Database Error");
+      }
+    },
+    tags: ["api"],
+    description: "Update a user",
+    notes: "Returns the updated user",
+    validate: { payload: UserSpec, params: { id: IdSpec }, failAction: validationError },
+    response: { schema: UserSpecPlus, failAction: validationError },
+  },
+      
 
   deleteAll: {
     auth: {
