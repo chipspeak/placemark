@@ -1,6 +1,6 @@
 import { db } from "../models/db.js";
 // eslint-disable-next-line import/no-duplicates
-import { UserSpec } from "../models/joi-schemas.js";
+import { UserSpec, UserUpdateSpec } from "../models/joi-schemas.js";
 // eslint-disable-next-line import/no-duplicates
 import { UserCredsSpec } from "../models/joi-schemas.js";
 
@@ -61,6 +61,23 @@ export const accountsController = {
     auth: false,
     handler: function (request, h) {
       request.cookieAuth.clear();
+      return h.redirect("/");
+    },
+  },
+
+  updateUser: {
+    auth: false,
+    validate: {
+      payload: UserUpdateSpec,
+      options: { abortEarly: false },
+      failAction: function (request, h, error) {
+        return h.view("profile-view", { title: "Update error", errors: error.details }).takeover().code(400);
+      },
+    },
+    handler: async function (request, h) {
+      const updatedUser = request.payload;
+      const userId = request.params.id; // Extract user ID from request parameters
+      await db.userStore.updateUser(userId, updatedUser); // Pass userId to updateUser function
       return h.redirect("/");
     },
   },

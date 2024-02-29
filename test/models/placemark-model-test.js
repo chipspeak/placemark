@@ -35,6 +35,24 @@ suite("Placemark Model tests", () => {
     assert.equal(retrievedPlacemark.title, placemarkToAdd.title);
   });
 
+  test("updated a placemark - success", async () => {
+    const user = await db.userStore.addUser(maggie);
+    const placemark = await db.placemarkStore.addPlacemark(user._id, testPlacemark);
+    console.log(placemark);
+    const update = {
+      title: "River Lee",
+      description: "River running through Cork city in munster province of Ireland",
+      location: "Cork City, Ireland",
+      latitude: "53.381290",
+      longitude: "-6.591850",
+      category: "River",
+    };
+    const updatedPlacemark = await db.placemarkStore.updatePlacemark(placemark._id, update);
+    console.log(updatedPlacemark);
+    assert.notEqual(placemark.description, updatedPlacemark.description);
+  });
+
+
   test("delete One Placemark - success", async () => {
     const user = await db.userStore.addUser(maggie);
     const placemark = await db.placemarkStore.addPlacemark(user._id, testPlacemark);

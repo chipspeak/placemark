@@ -42,6 +42,7 @@ suite("User API tests", () => {
     assert.deepEqual(users[0], returnedUser);
   });
 
+
   test("get a user - bad id", async () => {
     try {
       const returnedUser = await placemarkService.getUser("1234");

@@ -14,6 +14,15 @@ export const UserSpec = UserCredsSpec.keys({
   lastName: Joi.string().example("Simpson").required(),
 }).label("UserDetails");
 
+export const UserUpdateSpec = Joi.object()
+.keys({
+  firstName: Joi.string().example("Homer").required(),
+  lastName: Joi.string().example("Simpson").required(),
+  email: Joi.string().email().example("homer@simpsons.com").required(),  
+  password: Joi.string().example("secret").required(),
+})
+.label("UserUpdate");
+
 export const UserSpecPlus = UserSpec.keys({
   _id: IdSpec,
   __v: Joi.number(),

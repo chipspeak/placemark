@@ -76,6 +76,13 @@ export const dashboardController = {
     },
   },
 
+  showProfile: {
+    handler: async function (request, h) {
+      const loggedInUser = request.auth.credentials;
+      return h.view("profile-view", { user: loggedInUser });
+    },
+  },
+
   deletePlacemark: {
     handler: async function (request, h) {
       const placemarkId = request.params.id;
