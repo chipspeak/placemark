@@ -40,12 +40,12 @@
               <!-- Right column -->
               <div class="column">
                 <div class="columns">
-                  <!-- Left column (Longitude) -->
+                  <!-- Left column (Longitude) using pattern in both to ensure numbers can be positive or negative with values up to 180 and 6 decimal places-->
                   <div class="column">
                     <div class="field">
                       <label class="label">Longitude</label>
                       <div class="control">
-                        <input class="input" type="text" placeholder="Enter Longitude" name="longitude">
+                        <input class="input" type="text" placeholder="Enter Longitude" name="longitude" pattern="^-?([1-9]|[1-8][0-9]|90)(\.\d{1,6})?$">
                       </div>
                     </div>
                   </div>
@@ -54,7 +54,7 @@
                     <div class="field">
                       <label class="label">Latitude</label>
                       <div class="control">
-                        <input class="input" type="text" placeholder="Enter Latitude" name="latitude">
+                        <input class="input" type="text" placeholder="Enter Latitude" name="latitude" pattern="^-?([1-8]?[1-9]|[1-9]0)(\.\d{1,6})?$">
                       </div>
                     </div>
                   </div>

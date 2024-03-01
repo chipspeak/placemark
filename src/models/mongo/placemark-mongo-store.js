@@ -18,13 +18,14 @@ export const placemarkMongoStore = {
     const placemarks = await Placemark.find({ userId }).lean();
     return placemarks;
   },
-  
-  async getPlacemarkById(id) {
-    if (id) {
-      const placemark = await Placemark.findOne({ _id: id }).lean();
-      return placemark;
+
+  async getPlacemarksByUserIdAndCategory(userId, category) {
+    const query = { userId };
+    if (category) {
+        query.category = category; // Assuming 'category' is the field name in the Placemark schema
     }
-    return null;
+    const placemarks = await Placemark.find(query).lean();
+    return placemarks;
   },
 
   async deletePlacemark(id) {
