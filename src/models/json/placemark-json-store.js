@@ -44,7 +44,7 @@ export const placemarkJsonStore = {
   },
 
   async updatePlacemark(placemarkId, updatedPlacemark) {
-    const retrievedPlacemark = await db.getPlacemarkById(placemarkId);
+    const retrievedPlacemark = await this.getPlacemarkById(placemarkId);
     retrievedPlacemark.title = updatedPlacemark.title;
     retrievedPlacemark.description = updatedPlacemark.description;
     retrievedPlacemark.location = updatedPlacemark.location;

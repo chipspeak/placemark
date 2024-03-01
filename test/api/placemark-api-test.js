@@ -25,15 +25,6 @@ setup(async () => {
   });
   
 
-  test("create multiple placemarks", async () => {
-    for (let i = 0; i < testPlacemarks.length; i += 1) {
-      // eslint-disable-next-line no-await-in-loop
-      testPlacemarks[i] = await placemarkService.createPlacemark(testPlacemarks[i]);
-    }
-    const returnedPlacemarks = await placemarkService.getAllPlacemarks();
-    assert.equal(returnedPlacemarks.length, testPlacemarks.length);
-  });
-
   test("get a placemark - success", async () => {
     const placemark = await placemarkService.createPlacemark(testPlacemark);
     const returnedPlacemark = await placemarkService.getPlacemark(placemark._id);

@@ -46,7 +46,7 @@ export const dashboardController = {
       failAction: async function (request, h, error) {
         const placemarkId = request.params.id;
         const oldPlacemark = await db.placemarkStore.getPlacemarkById(placemarkId);
-        return h.view("update-placemark", {
+        return h.view("partials/update-placemark", {
           title: "Update Placemark",
           placemark: oldPlacemark,
           errors: error.details
@@ -72,7 +72,7 @@ export const dashboardController = {
     handler: async function (request, h) {
       const placemarkId = request.params.id;
       const placemark = await db.placemarkStore.getPlacemarkById(placemarkId);
-      return h.view("update-placemark", { placemark });
+      return h.view("partials/update-placemark", { placemark });
     },
   },
 
