@@ -1,6 +1,7 @@
 import { accountsController } from "./controllers/accounts-controller.js";
 import { dashboardController } from "./controllers/dashboard-controller.js";
 import { aboutController } from "./controllers/about-controller.js";
+import { categoryController } from "./controllers/category-controller.js";
 
 export const webRoutes = [
   { method: "GET", path: "/", config: accountsController.index },
@@ -15,6 +16,8 @@ export const webRoutes = [
   { method: "GET", path: "/dashboard", config: dashboardController.index },
   { method: "GET", path: "/profile", config: dashboardController.showProfile },
   { method: "POST", path: "/updateuser/{id}", config: accountsController.updateUser },
+
+  { method: "GET", path: "/categories", config: categoryController.index },
 
   { method: "POST", path: "/dashboard/addplacemark", config: dashboardController.addPlacemark },
   { method: "GET", path: "/dashboard/deleteplacemark/{id}", config: dashboardController.deletePlacemark },

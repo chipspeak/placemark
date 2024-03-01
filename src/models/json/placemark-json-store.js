@@ -21,6 +21,11 @@ export const placemarkJsonStore = {
     return db.data.placemarks.filter((placemark) => placemark.userId === id);
   },
 
+  async getPlacemarksByUserIdAndCategory(id, category) {
+    await db.read();
+    return db.data.placemarks.filter((placemark) => placemark.userId === id && placemark.category === category);
+  },
+
   async getPlacemarkById(id) {
     await db.read();
     return db.data.placemarks.find((placemark) => placemark._id === id);
