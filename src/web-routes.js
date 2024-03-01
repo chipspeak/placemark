@@ -2,6 +2,7 @@ import { accountsController } from "./controllers/accounts-controller.js";
 import { dashboardController } from "./controllers/dashboard-controller.js";
 import { aboutController } from "./controllers/about-controller.js";
 import { categoryController } from "./controllers/category-controller.js";
+import { adminDashboardController } from "./controllers/admin-dashboard-controller.js";
 
 export const webRoutes = [
   { method: "GET", path: "/", config: accountsController.index },
@@ -17,6 +18,10 @@ export const webRoutes = [
   { method: "GET", path: "/profile", config: dashboardController.showProfile },
   { method: "POST", path: "/updateuser/{id}", config: accountsController.updateUser },
 
+  { method: "GET", path: "/admin", config: adminDashboardController.index },
+  { method: "GET", path: "/admin/deleteuser/{id}", config: adminDashboardController.deleteUser },
+  { method: "GET", path: "/admin/showanalytics", config: adminDashboardController.showAnalytics },
+  
   { method: "GET", path: "/categories", config: categoryController.index },
 
   { method: "POST", path: "/dashboard/addplacemark", config: dashboardController.addPlacemark },

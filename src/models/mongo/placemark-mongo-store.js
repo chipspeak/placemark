@@ -13,6 +13,14 @@ export const placemarkMongoStore = {
     const placemarkObj = await newPlacemark.save();
     return placemarkObj;
   },
+
+  async getPlacemarkById(id) {
+    if (id) {
+      const placemark = await Placemark.findOne({ _id: id }).lean();
+      return placemark;
+    }
+    return null;
+  },
   
   async getPlacemarksByUserId(userId) {
     const placemarks = await Placemark.find({ userId }).lean();

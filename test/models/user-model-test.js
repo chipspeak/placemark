@@ -1,7 +1,9 @@
 import { assert } from "chai";
+import mongoose from "mongoose";
 import { db } from "../../src/models/db.js";
-import { maggie, testUsers } from "../fixtures.js";
+import { maggie, testUsers, testPlacemarks } from "../fixtures.js";
 import { assertSubset } from "../test-utils.js";
+
 
 suite("User Model tests", () => {
   setup(async () => {
@@ -34,6 +36,22 @@ suite("User Model tests", () => {
     assert.deepEqual(user, returnedUser2);
   });
 
+  test("delete a user and their placemarks", async () => {
+    // add a user with some placemarks
+    const user = await db.userStore.addUser(maggie);
+    await db.placemarkStore.addPlacemark(user._id, testPlacemarks[0]);
+    await db.placemarkStore.addPlacemark(user._id, testPlacemarks[1]);
+    await db.userStore.deleteUserById(user._id);
+
+    // verify that the user is deleted
+    const deletedUser = await db.userStore.getUserById(user._id);
+    assert.isNull(deletedUser);
+
+    // verify that the user's placemarks are deleted
+    const userPlacemarks = await db.placemarkStore.getPlacemarksByUserId(user._id);
+    assert.isEmpty(userPlacemarks);
+});
+
   test("update a user - success", async () => {
     const user = await db.userStore.addUser(maggie);
     const update = {
@@ -60,9 +78,16 @@ suite("User Model tests", () => {
     assert.isNull(await db.userStore.getUserById());
   });
 
+
   test("delete One User - fail", async () => {
-    await db.userStore.deleteUserById("bad-id");
+    const newUser = await db.userStore.addUser(maggie);
+    const userId = newUser._id; // Assuming _id is the user's ObjectId
+
+    // Convert userId to a valid ObjectId
+    const validUserId = new mongoose.Types.ObjectId(userId);
+
+    await db.userStore.deleteUserById(validUserId);
     const allUsers = await db.userStore.getAllUsers();
-    assert.equal(testUsers.length, allUsers.length);
+    assert.equal(allUsers.length, testUsers.length);
   });
 });

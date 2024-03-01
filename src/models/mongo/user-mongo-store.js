@@ -1,4 +1,5 @@
 import { User } from "./user.js";
+import { placemarkMongoStore } from "./placemark-mongo-store.js";
 
 export const userMongoStore = {
   async getAllUsers() {
@@ -27,11 +28,21 @@ export const userMongoStore = {
   },
 
   async deleteUserById(id) {
-    try {
-      await User.deleteOne({ _id: id });
-    } catch (error) {
-      console.log("bad id");
-    }
+    // retrieving the user's placemarks
+    const userPlacemarks = await placemarkMongoStore.getPlacemarksByUserId(id);
+
+    // creating an array of promises to delete each placemark from the userPlaceMarks array
+    await Promise.all(userPlacemarks.map(async (placemark) => {
+        await placemarkMongoStore.deletePlacemark(placemark._id);
+    }));
+
+    // deleting the user
+    await User.deleteOne({ _id: id });
+  },
+
+  async getNumberOfPlacemarks(id) {
+    const user = await this.getUserById(id);
+    return user.placemarks.length;
   },
 
   async deleteAll() {

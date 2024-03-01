@@ -1,0 +1,44 @@
+{
+  "users": [
+    {
+      "firstName": "Homer",
+      "lastName": "Simpson",
+      "email": "homer@simpson.com",
+      "password": "secret",
+      "_id": "b850f881-ca12-4027-ac73-81c1e1dcffec"
+    },
+    {
+      "firstName": "Marge",
+      "lastName": "Simpson",
+      "email": "marge@simpson.com",
+      "password": "secret",
+      "_id": "6c7e9c6d-80c7-4198-b3f2-17f655b716b0"
+    },
+    {
+      "firstName": "Bart",
+      "lastName": "Simpson",
+      "email": "bart@simpson.com",
+      "password": "secret",
+      "_id": "5413a4fe-3826-4600-807c-f192c9bf6572"
+    },
+    {
+      "firstName": "Maggie",
+      "lastName": "Simpson",
+      "email": "maggie@simpson.com",
+      "password": "secret",
+      "_id": "9f34cb5f-4711-4871-8087-c1ed58b3fa37"
+    }
+  ],
+  "placemarks": [
+    {
+      "title": "River Suir",
+      "description": "River running through waterford city",
+      "location": "Waterford, Ireland",
+      "latitude": "53.381290",
+      "longitude": "-6.591850",
+      "category": "River",
+      "_id": "99113385-649a-4ed5-a5b5-1671a03676ed",
+      "userId": "df8f205d-7d14-48ea-8f8f-ff6e6b50b052"
+    }
+  ]
+}

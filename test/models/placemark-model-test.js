@@ -77,7 +77,7 @@ suite("Placemark Model tests", () => {
   test("delete one placemark - fail", async () => {
     const user = await db.userStore.addUser(maggie);
     const placemark = await db.placemarkStore.addPlacemark(user._id, testPlacemark);
-    await db.placemarkStore.deletePlacemark("bad id");
+    await db.placemarkStore.deletePlacemark("1551");
     const placemarks = await db.placemarkStore.getAllPlacemarks();
     assert.equal(1, placemarks.length);
   });
