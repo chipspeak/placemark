@@ -1,0 +1,40 @@
+{{> placemark-brand}}
+<div id="navMenu" class="pt-5 navbar-menu">
+  <div class="navbar-menu is-hoverable">
+    <div class="navbar-end">
+      <a id="dashboard" class="button is-success is-outlined mx-2" href="/dashboard">Dashboard<i
+          class="fa-solid fa-house-chimney-user pl-2"></i></a>
+      <div class="navbar-item pl-2 pr-2 has-dropdown is-hoverable">
+        <button class="button is-success is-outlined">Categories<i class="fa-solid fa-list pl-2"></i></button>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="/categories?category=Park">Park</a>
+          <a class="navbar-item" href="/categories?category=Castle">Castle</a>
+          <a class="navbar-item" href="/categories?category=Ancient Ruin">Ancient Ruin</a>
+          <a class="navbar-item" href="/categories?category=Walk">Walk</a>
+          <a class="navbar-item" href="/categories?category=Beach">Beach</a>
+          <a class="navbar-item" href="/categories?category=River">River</a>
+          <a class="navbar-item" href="/categories?category=Lake">Lake</a>
+          <a class="navbar-item" href="/categories?category=Waterfall">Waterfall</a>
+          <a class="navbar-item" href="/categories?category=Hike">Hike</a>
+          <a class="navbar-item" href="/categories?category=Cave">Cave</a>
+          <a class="navbar-item" href="/categories?category=Ringfort">Ringfort</a>
+          <a class="navbar-item" href="/categories?category=Dolmen">Dolmen</a>
+          <a class="navbar-item" href="/categories?category=Monument">Monument</a>
+          <a class="navbar-item" href="/categories?category=National Park">National Park</a>
+        </div>
+      </div>
+      <a id="about" class="button is-success is-outlined mx-2" href="/about">About<i
+          class="fa-solid fa-address-card pl-2"></i></a>
+      <a id="profile" class="button is-success is-outlined mx-2" href="/profile">Profile<i
+          class="fa-solid fa-user-circle pl-2"></i></a>
+      <a id="profile" class="button is-success is-outlined mx-2" href="/documentation">API<i
+          class="fa-solid fa-book pl-2"></i></a>
+      <a id="logout" class="button is-success mx-2 is-outlined" href="/logout">Logout<i
+          class="fa-solid fa-right-from-bracket pl-2"></i></a>
+    </div>
+  </div>
+</div>
+<script>
+  document.getElementById("{{active}}").classList.add("is-focused");
+</script>
+<br>
