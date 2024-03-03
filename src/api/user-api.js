@@ -20,8 +20,8 @@ export const userApi = {
       }
     },
     tags: ["api"],
-    description: "Get all userApi",
-    notes: "Returns details of all userApi",
+    description: "Get all users",
+    notes: "Returns details of all users",
     response: { schema: UserArray, failAction: validationError },
   },
 
@@ -110,6 +110,11 @@ export const userApi = {
       strategy: "jwt",
     },
     handler: async function (request, h) {
+      const decodedToken = decodeToken(request.headers.authorization);
+      // check the role of the user and throw error if they are not an admin
+      if (decodedToken.role !== "admin") {
+        return Boom.forbidden("Only admins can delete all users");
+      }
       try {
         await db.userStore.deleteAll();
         return h.response().code(204);
@@ -122,18 +127,55 @@ export const userApi = {
     notes: "All users removed from Playtime",
   },
 
+  // function to delete a single user by id
+  deleteOne: {
+    auth: {
+      strategy: "jwt",
+    },
+    handler: async function (request, h) {
+      const userId = request.params.id;
+      const decodedToken = decodeToken(request.headers.authorization);
+      // check the role of the user and throw error if they are not an admin
+      if (decodedToken.role !== "admin") {
+        return Boom.forbidden("Only admins can delete users");
+      }
+      try {
+        await db.userStore.deleteUserById(userId);
+        return h.response().code(204);
+      } catch (err) {
+        return Boom.serverUnavailable("Database Error");
+      }
+    },
+    tags: ["api"],
+    description: "Delete a single user",
+    notes: "Deletes a single user from Playtime by their ID",
+    validate: { params: { id: IdSpec }, failAction: validationError },
+  },
+
   // function to authenticate a user and create a JWT token upon success
   authenticate: {
     auth: false,
     handler: async function (request, h) {
       try {
-        const user = await db.userStore.getUserByEmail(request.payload.email);
-        if (!user) {
-          return Boom.unauthorized("User not found");
+        const { email, password } = request.payload;
+        // Check if email and password are provided
+        if (!email || !password) {
+          return Boom.badRequest("Email and password are required");
         }
-        if (user.password !== request.payload.password) {
-          return Boom.unauthorized("Invalid password");
+        if (email === process.env.email && password === process.env.password) {
+          const admin = {
+            email: process.env.email,
+            password: process.env.password,
+          };
+          const token = createToken(admin);
+          return h.response({ success: true, token: token }).code(201);
+          }
+        // Authenticate user based on email and password
+        const user = await db.userStore.getUserByEmail(email);
+        if (!user || user.password !== password) {
+          return Boom.unauthorized("Invalid email or password");
         }
+        // Generate JWT token for authenticated user
         const token = createToken(user);
         return h.response({ success: true, token: token }).code(201);
       } catch (err) {
@@ -141,7 +183,7 @@ export const userApi = {
       }
     },
     tags: ["api"],
-    description: "Authenticate  a User",
+    description: "Authenticate a User",
     notes: "If user has valid email/password, create and return a JWT token",
     validate: { payload: UserCredsSpec, failAction: validationError },
     response: { schema: JwtAuth, failAction: validationError },
