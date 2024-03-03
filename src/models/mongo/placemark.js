@@ -2,6 +2,7 @@ import Mongoose from "mongoose";
 
 const { Schema } = Mongoose;
 
+// define the placemark schema
 const placemarkSchema = new Schema({
   title: String,
   description: String,
@@ -9,6 +10,7 @@ const placemarkSchema = new Schema({
   latitude: String,
   longitude: String,
   category: String,
+  img: String,
   userId: {
     type: Schema.Types.ObjectId,
     ref: "User",

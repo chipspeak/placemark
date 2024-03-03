@@ -2,6 +2,7 @@ import Mongoose from "mongoose";
 
 const { Schema } = Mongoose;
 
+// define the category schema
 const categorySchema = new Schema({
   title: String,
   userid: {

@@ -1,23 +1,31 @@
+import dotenv from "dotenv";
 import { db } from "../models/db.js";
 // eslint-disable-next-line import/no-duplicates
 import { UserSpec, UserUpdateSpec } from "../models/joi-schemas.js";
 // eslint-disable-next-line import/no-duplicates
 import { UserCredsSpec } from "../models/joi-schemas.js";
-import { adminUser } from "../admin.js";
 
+dotenv.config();
+
+// export accountsController object
 export const accountsController = {
+  // shows index page
   index: {
     auth: false,
     handler: function (request, h) {
       return h.view("main", { title: "Welcome to Placemark" });
     },
   },
+
+  // shows signup page
   showSignup: {
     auth: false,
     handler: function (request, h) {
       return h.view("signup-view", { title: "Sign up for Placemark" });
     },
   },
+
+  // function to sign up a new user, payload is checked against UserSpec schema
   signup: {
     auth: false,
     validate: {
@@ -33,6 +41,8 @@ export const accountsController = {
       return h.redirect("/login");
     },
   },
+
+  // shows login page
   showLogin: {
     auth: false,
     handler: function (request, h) {
@@ -40,6 +50,7 @@ export const accountsController = {
     },
   },
 
+  // function to log in a user, payload is checked against UserCredsSpec schema
   login: {
     auth: false,
     validate: {
@@ -52,22 +63,26 @@ export const accountsController = {
     handler: async function (request, h) {
       const { email, password } = request.payload;
 
-      if (email === adminUser.email && password === adminUser.password) {
+      // If the email and password match the admin credentials (stored in .env), we redirect to the admin view
+      if (email === process.env.email && password === process.env.password) {
         request.cookieAuth.set({ id: "admin" });
-        console.log(`logging in: ${adminUser.email}`);
+        console.log(`logging in: ${process.env.email}`);
         return h.redirect("/admin");
-      } 
-
+      }
+      // if they don't match admin, we continue
       const user = await db.userStore.getUserByEmail(email);
+      // if the details don't match creds stored in the db, we refresh the page
       if (!user || user.password !== password) {
         return h.redirect("/");
       }
+      // if the details match, we set the cookie and redirect to the dashboard
       request.cookieAuth.set({ id: user._id });
       console.log(`logging in: ${user.email}`);
       return h.redirect("/dashboard");
     },
   },
 
+  // function to log out a user via clearing the cookie
   logout: {
     auth: false,
     handler: function (request, h) {
@@ -76,6 +91,7 @@ export const accountsController = {
     },
   },
 
+  // function to update a user via the updateUser function in the userStore
   updateUser: {
     auth: false,
     validate: {
@@ -87,23 +103,25 @@ export const accountsController = {
     },
     handler: async function (request, h) {
       const updatedUser = request.payload;
-      const userId = request.params.id; // Extract user ID from request parameters
-      await db.userStore.updateUser(userId, updatedUser); // Pass userId to updateUser function
+      const userId = request.params.id; // extract user ID from request parameters
+      await db.userStore.updateUser(userId, updatedUser); // pass userId to updateUser function
       return h.redirect("/");
     },
   },
 
+  // function to validate a user's session
   async validate(request, session) {
+    // if the session ID corresponds to an admin user the admin user is valid
     if (session.id === "admin") {
-      // If the session ID corresponds to an admin user
       return { isValid: true, credentials: { id: "admin" } };
     }
-  
-    // For regular users, validate the session as before
+    // for regular users, validate the session as before
     const user = await db.userStore.getUserById(session.id);
+    // if the user is not found, the user is not valid
     if (!user) {
       return { isValid: false };
     }
+    // if the user is found, the user is valid
     return { isValid: true, credentials: user };
-  }
+  },
 };

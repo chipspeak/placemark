@@ -6,6 +6,7 @@ import { db } from "../../src/models/db.js";
 
 const users = new Array(testUsers.length);
 
+// setup
 suite("User API tests", () => {
   setup(async () => {
     placemarkService.clearAuth();
@@ -21,13 +22,15 @@ suite("User API tests", () => {
   });
   teardown(async () => {});
 
+  // test to create a user
   test("create a user", async () => {
     const newUser = await placemarkService.createUser(maggie);
     assertSubset(maggie, newUser);
     assert.isDefined(newUser._id);
   });
 
-  test("delete all user", async () => {
+  // test to delete all users
+  test("delete all users", async () => {
     let returnedUsers = await placemarkService.getAllUsers();
     assert.equal(returnedUsers.length, 4);
     await placemarkService.deleteAllUsers();
@@ -37,12 +40,13 @@ suite("User API tests", () => {
     assert.equal(returnedUsers.length, 1);
   });
 
+  // test to get a user by id
   test("get a user", async () => {
     const returnedUser = await placemarkService.getUser(users[0]._id);
     assert.deepEqual(users[0], returnedUser);
   });
 
-
+  // test to attempt to retrieve a user with invalid data
   test("get a user - bad id", async () => {
     try {
       const returnedUser = await placemarkService.getUser("1234");
@@ -53,6 +57,7 @@ suite("User API tests", () => {
     }
   });
 
+  // test to attempt to retrieve a user that has been deleted
   test("get a user - deleted user", async () => {
     await placemarkService.deleteAllUsers();
     await placemarkService.createUser(maggie);
