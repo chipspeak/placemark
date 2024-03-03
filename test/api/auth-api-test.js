@@ -3,6 +3,7 @@ import { placemarkService } from "./placemark-service.js";
 import { decodeToken } from "../../src/api/jwt-utils.js";
 import { maggie, maggieCreds } from "../fixtures.js";
 
+// setup
 suite("Authentication API tests", async () => {
   setup(async () => {
     placemarkService.clearAuth();
@@ -11,6 +12,7 @@ suite("Authentication API tests", async () => {
     await placemarkService.deleteAllUsers();
   });
 
+  // test to create a user and authenticate the user by checking for a token
   test("authenticate", async () => {
     const returnedUser = await placemarkService.createUser(maggie);
     const response = await placemarkService.authenticate(maggieCreds);
@@ -18,6 +20,7 @@ suite("Authentication API tests", async () => {
     assert.isDefined(response.token);
   });
 
+  // test to verify a token by decoding it and matching the user details
   test("verify Token", async () => {
     const returnedUser = await placemarkService.createUser(maggie);
     const response = await placemarkService.authenticate(maggieCreds);
@@ -27,6 +30,7 @@ suite("Authentication API tests", async () => {
     assert.equal(userInfo.userId, returnedUser._id);
   });
 
+  // test to check for an unauthorized route by clearing authorization and then attempting to delete all users
   test("check Unauthorized", async () => {
     placemarkService.clearAuth();
     try {

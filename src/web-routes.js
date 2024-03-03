@@ -24,6 +24,10 @@ export const webRoutes = [
   
   { method: "GET", path: "/categories", config: categoryController.index },
 
+  { method: "GET", path: "/dashboard/uploadimage/{id}", config: dashboardController.showUploadImageForm },
+  { method: "POST", path: "/dashboard/uploadimage/{id}", config: dashboardController.uploadImage },
+  { method: "GET", path: "/dashboard/deleteimage/{id}", config: dashboardController.deleteImage },
+
   { method: "POST", path: "/dashboard/addplacemark", config: dashboardController.addPlacemark },
   { method: "GET", path: "/dashboard/deleteplacemark/{id}", config: dashboardController.deletePlacemark },
   { method: "GET", path: "/dashboard/updateplacemark/{id}", config: dashboardController.showUpdatePlacemarkForm },

@@ -3,6 +3,7 @@ import Boom from "@hapi/boom";
 
 const { Schema } = Mongoose;
 
+// define the user schema
 const userSchema = new Schema({
   firstName: String,
   lastName: String,

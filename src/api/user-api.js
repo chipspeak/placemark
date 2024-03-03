@@ -4,7 +4,9 @@ import { UserSpec, UserSpecPlus, IdSpec, UserArray, JwtAuth, UserCredsSpec } fro
 import { validationError } from "./logger.js";
 import { createToken, validate, decodeToken } from "./jwt-utils.js";
 
+// user API export
 export const userApi = {
+  // function to find all users
   find: {
     auth: {
       strategy: "jwt",
@@ -23,6 +25,7 @@ export const userApi = {
     response: { schema: UserArray, failAction: validationError },
   },
 
+  // function to find a single user by id
   findOne: {
     auth: {
       strategy: "jwt",
@@ -45,6 +48,7 @@ export const userApi = {
     response: { schema: UserSpecPlus, failAction: validationError },
   },
 
+  // function to create a new user
   create: {
     auth: false,
     handler: async function (request, h) {
@@ -65,32 +69,28 @@ export const userApi = {
     response: { schema: UserSpecPlus, failAction: validationError },
   },
 
+  // function to update a user
   update: {
     auth: {
       strategy: "jwt",
     },
     handler: async function (request, h) {
       try {
-        // Decode and validate the JWT token
+        // decode and validate the JWT token
         const decodedToken = decodeToken(request.headers.authorization);
         const validationResult = await validate(decodedToken, request);
         if (!validationResult.isValid) {
           return Boom.unauthorized("Invalid credentials");
         }
-
-        console.log("validated");
-        
         // eslint-disable-next-line prefer-destructuring
         const userId = decodedToken.userId;
-        
+        // declare the updated user as the payload
         const updatedUser = request.payload;
-        console.log(request.payload)
-        console.log(userId)
+        // passing the updated user to the updateUser function
         const result = await db.userStore.updateUser(userId, updatedUser);
-
+        // convert the result to an object
         const resultObject = result.toObject();
-        console.log("Below is the updated user");
-        console.log(resultObject)
+        // return the updated user
         return h.response(resultObject).code(200);
 
       } catch (err) {
@@ -104,7 +104,7 @@ export const userApi = {
     response: { schema: UserSpecPlus, failAction: validationError },
   },
       
-
+  // function to delete all users
   deleteAll: {
     auth: {
       strategy: "jwt",
@@ -118,10 +118,11 @@ export const userApi = {
       }
     },
     tags: ["api"],
-    description: "Delete all userApi",
-    notes: "All userApi removed from Playtime",
+    description: "Delete all users",
+    notes: "All users removed from Playtime",
   },
 
+  // function to authenticate a user and create a JWT token upon success
   authenticate: {
     auth: false,
     handler: async function (request, h) {

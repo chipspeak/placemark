@@ -1,8 +1,7 @@
 import Joi from "joi";
 
-
+// joi schemas for the user objects as per labs
 export const IdSpec = Joi.alternatives().try(Joi.string(), Joi.object()).description("a valid ID");
-
 
 export const UserCredsSpec = Joi.object()
   .keys({
@@ -11,22 +10,19 @@ export const UserCredsSpec = Joi.object()
   })
   .label("UserCredentials");
 
-
 export const UserSpec = UserCredsSpec.keys({
   firstName: Joi.string().example("Homer").required(),
   lastName: Joi.string().example("Simpson").required(),
 }).label("UserDetails");
 
-
 export const UserUpdateSpec = Joi.object()
-.keys({
-  firstName: Joi.string().example("Homer").required(),
-  lastName: Joi.string().example("Simpson").required(),
-  email: Joi.string().email().example("homer@simpsons.com").required(),  
-  password: Joi.string().example("secret").required(),
-})
-.label("UserUpdate");
-
+  .keys({
+    firstName: Joi.string().example("Homer").required(),
+    lastName: Joi.string().example("Simpson").required(),
+    email: Joi.string().email().example("homer@simpsons.com").required(),
+    password: Joi.string().example("secret").required(),
+  })
+  .label("UserUpdate");
 
 export const UserSpecPlus = UserSpec.keys({
   _id: IdSpec,
@@ -35,37 +31,23 @@ export const UserSpecPlus = UserSpec.keys({
 
 export const UserArray = Joi.array().items(UserSpecPlus).label("UserArray");
 
+// array of allowed placemarks for user in the placemarks schema
+const allowedCategories = ["Park", "Castle", "Ancient Ruin", "Walk", "Beach", "River", "Lake", "Waterfall", "Hike", "Cave", "Ringfort", "Dolmen", "Monument", "National Park"];
 
-const allowedCategories = [
-  "Park",
-  "Castle",
-  "Ancient Ruin",
-  "Walk",
-  "Beach",
-  "River",
-  "Lake",
-  "Waterfall",
-  "Hike",
-  "Cave",
-  "Ringfort",
-  "Dolmen",
-  "Monument",
-  "National Park"
-];
-
-
-// spread operator is used to spread the allowedCategories array into the valid() function
+// spread operator is used to spread the allowedCategories array into the valid() function ensuring user has to use one of the allowed categories
 export const PlacemarkSpec = Joi.object()
-.keys({
-  title: Joi.string().example("Phoenix Park").required(),
-  description: Joi.string().example("Beautiful park with numerous attractions and plenty of parking").max(200).required(),
-  location: Joi.string().example("Dublin, Ireland").required(),
-  latitude: Joi.number().example("53.360001").min(-90).max(90).required(),
-  longitude: Joi.number().example("-6.325000").min(-180).max(180).required(),
-  category: Joi.string().example("Park").valid(...allowedCategories).required(),
-})
-.label("PlacemarkDetails");
-
+  .keys({
+    title: Joi.string().example("Phoenix Park").required(),
+    description: Joi.string().example("Beautiful park with numerous attractions and plenty of parking").max(200).required(),
+    location: Joi.string().example("Dublin, Ireland").required(),
+    latitude: Joi.number().example("53.360001").min(-90).max(90).required(),
+    longitude: Joi.number().example("-6.325000").min(-180).max(180).required(),
+    category: Joi.string()
+      .example("Park")
+      .valid(...allowedCategories)
+      .required(),
+  })
+  .label("PlacemarkDetails");
 
 export const PlacemarkPlusSpec = PlacemarkSpec.keys({
   userId: IdSpec,
@@ -73,9 +55,7 @@ export const PlacemarkPlusSpec = PlacemarkSpec.keys({
   __v: Joi.number(),
 }).label("PlacemarkDetailsPlus");
 
-
 export const PlacemarkArraySpec = Joi.array().items(PlacemarkPlusSpec).label("PlacemarkArray");
-
 
 export const JwtAuth = Joi.object()
   .keys({

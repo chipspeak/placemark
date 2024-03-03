@@ -4,7 +4,7 @@ import { db } from "../../src/models/db.js";
 import { maggie, testUsers, testPlacemarks } from "../fixtures.js";
 import { assertSubset } from "../test-utils.js";
 
-
+// test setup
 suite("User Model tests", () => {
   setup(async () => {
     db.init("mongo");
@@ -15,11 +15,13 @@ suite("User Model tests", () => {
     }
   });
 
+  // test to create a new user
   test("create a user", async () => {
     const newUser = await db.userStore.addUser(maggie);
     assertSubset(maggie, newUser);
   });
 
+  // test to delete all placemarks
   test("delete all placemarks", async () => {
     let returnedUsers = await db.userStore.getAllUsers();
     assert.equal(returnedUsers.length, 3);
@@ -28,6 +30,7 @@ suite("User Model tests", () => {
     assert.equal(returnedUsers.length, 0);
   });
 
+  // test to get a user by both id and email
   test("get a user - success", async () => {
     const user = await db.userStore.addUser(maggie);
     const returnedUser1 = await db.userStore.getUserById(user._id);
@@ -36,6 +39,7 @@ suite("User Model tests", () => {
     assert.deepEqual(user, returnedUser2);
   });
 
+  // test to delete a user and their placemarks
   test("delete a user and their placemarks", async () => {
     // add a user with some placemarks
     const user = await db.userStore.addUser(maggie);
@@ -50,8 +54,10 @@ suite("User Model tests", () => {
     // verify that the user's placemarks are deleted
     const userPlacemarks = await db.placemarkStore.getPlacemarksByUserId(user._id);
     assert.isEmpty(userPlacemarks);
-});
+  });
 
+
+  // test to update a users details
   test("update a user - success", async () => {
     const user = await db.userStore.addUser(maggie);
     const update = {
@@ -64,6 +70,8 @@ suite("User Model tests", () => {
     assert.notEqual(user.firstName, updatedUser.firstName);
   });
 
+
+  // test to successfully delete a user
   test("delete One User - success", async () => {
     await db.userStore.deleteUserById(testUsers[0]._id);
     const returnedUsers = await db.userStore.getAllUsers();
@@ -72,6 +80,8 @@ suite("User Model tests", () => {
     assert.isNull(deletedUser);
   });
 
+
+  // test to check for a user using bad params
   test("get a user - bad params", async () => {
     assert.isNull(await db.userStore.getUserByEmail(""));
     assert.isNull(await db.userStore.getUserById(""));
@@ -79,15 +89,12 @@ suite("User Model tests", () => {
   });
 
 
+  // test to unsuccessfully delete a user
   test("delete One User - fail", async () => {
     const newUser = await db.userStore.addUser(maggie);
-    const userId = newUser._id; // Assuming _id is the user's ObjectId
-
-    // Convert userId to a valid ObjectId
-    const validUserId = new mongoose.Types.ObjectId(userId);
-
-    await db.userStore.deleteUserById(validUserId);
+    const userId = newUser._id;
+    await db.userStore.deleteUserById(userId);
     const allUsers = await db.userStore.getAllUsers();
     assert.equal(allUsers.length, testUsers.length);
-  });
+});
 });

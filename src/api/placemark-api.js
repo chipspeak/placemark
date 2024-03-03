@@ -5,8 +5,9 @@ import { PlacemarkSpec, PlacemarkPlusSpec, IdSpec, PlacemarkArraySpec } from "..
 import { validationError } from "./logger.js";
 import { decodeToken, validate } from "./jwt-utils.js";
 
-
+// placemark API export
 export const placemarkApi = {
+  // function to find all placemarks
   find: {
     auth: {
       strategy: "jwt",
@@ -21,10 +22,11 @@ export const placemarkApi = {
     },
     tags: ["api"],
     response: { schema: PlacemarkArraySpec, failAction: validationError },
-    description: "Get all placemarkApi",
-    notes: "Returns all placemarkApi",
+    description: "Get all placemarks",
+    notes: "Returns all placemarks",
   },
 
+  // function to find a single placemark by id
   findOne: {
     auth: {
       strategy: "jwt",
@@ -47,31 +49,28 @@ export const placemarkApi = {
     response: { schema: PlacemarkPlusSpec, failAction: validationError },
   },
 
+  // function to create a new placemark
   create: {
     auth: {
       strategy: "jwt",
     },
     handler: async function (request, h) {
       try {
-        // Decode and validate the JWT token
-        console.log(request.headers.authorization);
+        // decode and validate the JWT token
+
         const decodedToken = decodeToken(request.headers.authorization);
         const validationResult = await validate(decodedToken, request);
-        console.log("Below is the validation result");
-        console.log(validationResult);
         if (!validationResult.isValid) {
           return Boom.unauthorized("Invalid credentials");
         }
-        // Access user ID from decoded payload
+        // access user ID from decoded payload
         // eslint-disable-next-line prefer-destructuring
         const userId = decodedToken.userId;
-        // Access new placemark data from request payload
+        // access new placemark data from request payload
         const newPlacemark = request.payload;
-        console.log("Below is the new placemark");
-        console.log(newPlacemark);
-        // Add userId to the new placemark data
+        // add userId to the new placemark data
         newPlacemark.userId = userId;
-        // Proceed with placemark creation using the retrieved user ID
+        // proceed with placemark creation using the retrieved user id
         const result = await db.placemarkStore.addPlacemark(userId, newPlacemark);
         if (result) {
           const resultObject = result.toObject();
@@ -79,7 +78,6 @@ export const placemarkApi = {
         }
         return Boom.badImplementation("Error creating placemark");
       } catch (error) {
-        console.error(error);
         return Boom.serverUnavailable("Database Error - check that a valid user id was provided");
       }
     },
@@ -90,6 +88,7 @@ export const placemarkApi = {
     response: { schema: PlacemarkPlusSpec, failAction: validationError },
   },
   
+  // function to delete all placemarks
   deleteAll: {
     auth: {
       strategy: "jwt",
@@ -103,9 +102,10 @@ export const placemarkApi = {
       }
     },
     tags: ["api"],
-    description: "Delete all placemarkApi",
+    description: "Delete all placemarks",
   },
 
+  // function to delete a single placemark by id
   deleteOne: {
     auth: {
       strategy: "jwt",
@@ -127,44 +127,37 @@ export const placemarkApi = {
     validate: { params: { id: IdSpec }, failAction: validationError },
   },
 
-  // Update a placemark
+// function to update a placemark
 update: {
   auth: {
     strategy: "jwt",
   },
   handler: async function (request, h) {
     try {
-      // Decode and validate the JWT token
+      // decode and validate the JWT token
       const decodedToken = decodeToken(request.headers.authorization);
       const validationResult = await validate(decodedToken, request);
       if (!validationResult.isValid) {
         return Boom.unauthorized("Invalid credentials");
       }
-      
-      // Access user ID from decoded payload
+      // access user ID from decoded payload
       // eslint-disable-next-line prefer-destructuring
       const userId = decodedToken.userId;
-      
-      // Access updated placemark data from request payload
+      // access updated placemark data from request payload
       const updatedPlacemark = request.payload;
-      
-      // Add userId to the updated placemark data
+      // add userId to the updated placemark data
       updatedPlacemark.userId = userId;
-      
-      // Proceed with updating the placemark
+      // proceed with updating the placemark
       const placemarkId = request.params.id;
       const result = await db.placemarkStore.updatePlacemark(placemarkId, updatedPlacemark);
-      
+      // conditional to check that we have in fact updated a placemark
       if (result) {
         const resultObject = result.toObject();
-        console.log("Below is the updated placemark");
-        console.log(resultObject)
         return h.response(resultObject).code(200);
       }
       return Boom.badImplementation("Error updating placemark");
 
     } catch (error) {
-      console.error(error);
       return Boom.badImplementation("Error updating placemark");
     }
   },
@@ -173,7 +166,7 @@ update: {
   notes: "Updates an existing placemark",
   validate: {
     params: { id: IdSpec },
-    payload: PlacemarkSpec // Specify the schema for the request payload
+    payload: PlacemarkSpec
   },
   response: { emptyStatusCode: 204, failAction: validationError },
 },
