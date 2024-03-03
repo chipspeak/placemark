@@ -1,11 +1,11 @@
 import { assert } from "chai";
 import { db } from "../../src/models/db.js";
-import { testPlacemarks, testPlacemark, maggie } from "../fixtures.js";
+import { testPlacemarks, testPlacemark, maggie, testPlacemarkImages } from "../fixtures.js";
 
 // setup
 suite("Placemark Model tests", () => {
   setup(async () => {
-    db.init("json");
+    db.init("mongo");
     await db.placemarkStore.deleteAllPlacemarks();
     await db.userStore.deleteAll();
   });
@@ -61,7 +61,7 @@ suite("Placemark Model tests", () => {
   test("add image to placemark - success", async () => {
     const user = await db.userStore.addUser(maggie);
     const placemark = await db.placemarkStore.addPlacemark(user._id, testPlacemark);
-    const imageFile = "sample.jpg";
+    const imageFile = testPlacemarkImages[0];
     await db.placemarkStore.updatePlacemarkImage(placemark._id, imageFile);
     const updatedPlacemark = await db.placemarkStore.getPlacemarkById(placemark._id);
     assert.isNotNull(updatedPlacemark.img); 
@@ -71,7 +71,7 @@ suite("Placemark Model tests", () => {
   test("delete image from placemark - success", async () => {
     const user = await db.userStore.addUser(maggie);
     const placemark = await db.placemarkStore.addPlacemark(user._id, testPlacemark);
-    const imageFile = "sample.jpg";
+    const imageFile = testPlacemarkImages[0];
     await db.placemarkStore.updatePlacemarkImage(placemark._id, imageFile);
     let updatedPlacemark = await db.placemarkStore.getPlacemarkById(placemark._id);
     assert.isNotNull(updatedPlacemark.img);

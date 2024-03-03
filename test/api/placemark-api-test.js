@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import { assertSubset } from "../test-utils.js";
 import { placemarkService } from "./placemark-service.js";
-import { maggie, maggieCreds, testPlacemarks, testPlacemark } from "../fixtures.js";
+import { maggie, maggieCreds, testPlacemarks, testPlacemark, testAdminCreds } from "../fixtures.js";
 
 // setup
 suite("Placemark API tests", () => {
@@ -9,8 +9,7 @@ let user = null;
 let userId = null;
 setup(async () => {
   placemarkService.clearAuth();
-  user = await placemarkService.createUser(maggie);
-  await placemarkService.authenticate(maggieCreds);
+  await placemarkService.authenticate(testAdminCreds);
   await placemarkService.deleteAllPlacemarks();
   await placemarkService.deleteAllUsers();
   user = await placemarkService.createUser(maggie);
@@ -42,6 +41,28 @@ setup(async () => {
       assert.fail("Should not return a response");
     } catch (error) {
       assert.equal(error.response.data.statusCode, 404);
+    }
+  });
+
+  test("delete all placemarks - success due to admin credentials", async () => {
+    placemarkService.clearAuth();
+    await placemarkService.authenticate(testAdminCreds);
+    await placemarkService.createPlacemark(testPlacemark);
+    await placemarkService.createPlacemark(testPlacemarks[0]);
+    await placemarkService.createPlacemark(testPlacemarks[1]);
+    await placemarkService.deleteAllPlacemarks();
+    const placemarks = await placemarkService.getAllPlacemarks();
+    assert.equal(0, placemarks.length);
+  });
+
+  test(" delete all placemarks fail - not an admin", async () => {
+    try {
+    await placemarkService.createPlacemark(testPlacemark);
+    await placemarkService.createPlacemark(testPlacemarks[0]);
+    await placemarkService.createPlacemark(testPlacemarks[1]);
+    await placemarkService.deleteAllPlacemarks();
+    } catch (error) {
+      assert.equal(error.response.data.statusCode, 403);
     }
   });
 

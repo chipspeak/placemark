@@ -49,6 +49,12 @@ export const placemarkService = {
     return res.data;
   },
 
+  // function to delete a placemark
+  async deleteUser(id) {
+    const res = await axios.delete(`${this.placemarkUrl}/api/users/${id}`);
+    return res.data;
+  },
+
   // function to create a placemark
   async createPlacemark(placemark) {
     const res = await axios.post(`${this.placemarkUrl}/api/users/placemarks`, placemark);

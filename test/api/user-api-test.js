@@ -1,36 +1,38 @@
 import { assert } from "chai";
 import { assertSubset } from "../test-utils.js";
 import { placemarkService } from "./placemark-service.js";
-import { maggie, maggieCreds, testUsers } from "../fixtures.js";
+import { maggie, maggieCreds, testUsers, testAdminCreds } from "../fixtures.js";
 import { db } from "../../src/models/db.js";
 
 const users = new Array(testUsers.length);
+let maggieUser = "";
 
 // setup
 suite("User API tests", () => {
   setup(async () => {
     placemarkService.clearAuth();
-    await placemarkService.createUser(maggie);
-    await placemarkService.authenticate(maggieCreds);
+    await placemarkService.authenticate(testAdminCreds);
     await placemarkService.deleteAllUsers();
     for (let i = 0; i < testUsers.length; i += 1) {
       // eslint-disable-next-line no-await-in-loop
       users[0] = await placemarkService.createUser(testUsers[i]);
     }
-    await placemarkService.createUser(maggie);
-    await placemarkService.authenticate(maggieCreds);
+    maggieUser = await placemarkService.createUser(maggie);
   });
   teardown(async () => {});
 
   // test to create a user
   test("create a user", async () => {
+    await placemarkService.authenticate(maggieCreds);
     const newUser = await placemarkService.createUser(maggie);
     assertSubset(maggie, newUser);
     assert.isDefined(newUser._id);
   });
 
   // test to delete all users
-  test("delete all users", async () => {
+  test("delete all users - success due to admin credentials", async () => {
+    placemarkService.clearAuth();
+    await placemarkService.authenticate(testAdminCreds);
     let returnedUsers = await placemarkService.getAllUsers();
     assert.equal(returnedUsers.length, 4);
     await placemarkService.deleteAllUsers();
@@ -38,6 +40,34 @@ suite("User API tests", () => {
     await placemarkService.authenticate(maggieCreds);
     returnedUsers = await placemarkService.getAllUsers();
     assert.equal(returnedUsers.length, 1);
+  });
+
+  // test to delete all users - should fail due to user vs admin creds
+  test("delete all users - fail due to not being an admin", async () => {
+    try {
+      await placemarkService.deleteAllUsers();
+    } catch (error) {
+      assert.equal(error.response.data.statusCode, 403);
+    }
+  });
+
+  // test to delete a single user
+  test("delete a user", async () => {
+    await placemarkService.authenticate(testAdminCreds);
+    console.log(testAdminCreds);
+    console.log(maggieUser._id);
+    await placemarkService.deleteUser(maggieUser._id);
+    assert.deepEqual(users.length, 3);
+  });
+
+  // test to delete a single user - should fail due to user vs admin creds
+  test("delete a user - fail due to not being an admin", async () => {
+    try {
+      await placemarkService.authenticate(maggieCreds);
+      await placemarkService.deleteUser(maggie._id);
+    } catch (error) {
+      assert.equal(error.response.data.statusCode, 403);
+    }
   });
 
   // test to get a user by id
@@ -59,6 +89,8 @@ suite("User API tests", () => {
 
   // test to attempt to retrieve a user that has been deleted
   test("get a user - deleted user", async () => {
+    placemarkService.clearAuth();
+    await placemarkService.authenticate(testAdminCreds);
     await placemarkService.deleteAllUsers();
     await placemarkService.createUser(maggie);
     await placemarkService.authenticate(maggieCreds);
