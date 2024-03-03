@@ -7,6 +7,11 @@ export const maggie = {
   password: "secret"
 };
 
+export const maggieCreds = {
+  email: "maggie@simpson.com",
+  password: "secret"
+};
+
 export const testUsers = [
   {
     firstName: "Homer",
@@ -35,6 +40,15 @@ export const testPlacemark = {
   "latitude" : "53.381290",
   "longitude" : "-6.591850",
   "category" : "River",
+};
+
+export const incorrectPlaceMark = {
+  "title" : "",
+  "description" : "test",
+  "location" : "test",
+  "latitude" : "test",
+  "longitude" : "test",
+  "category" : "test",
 };
 
 export const testPlacemarks = [

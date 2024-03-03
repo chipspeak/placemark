@@ -1,6 +1,8 @@
 import { accountsController } from "./controllers/accounts-controller.js";
 import { dashboardController } from "./controllers/dashboard-controller.js";
 import { aboutController } from "./controllers/about-controller.js";
+import { categoryController } from "./controllers/category-controller.js";
+import { adminDashboardController } from "./controllers/admin-dashboard-controller.js";
 
 export const webRoutes = [
   { method: "GET", path: "/", config: accountsController.index },
@@ -13,8 +15,23 @@ export const webRoutes = [
   { method: "POST", path: "/authenticate", config: accountsController.login },
 
   { method: "GET", path: "/dashboard", config: dashboardController.index },
+  { method: "GET", path: "/profile", config: dashboardController.showProfile },
+  { method: "POST", path: "/updateuser/{id}", config: accountsController.updateUser },
+
+  { method: "GET", path: "/admin", config: adminDashboardController.index },
+  { method: "GET", path: "/admin/deleteuser/{id}", config: adminDashboardController.deleteUser },
+  { method: "GET", path: "/admin/showanalytics", config: adminDashboardController.showAnalytics },
+  
+  { method: "GET", path: "/categories", config: categoryController.index },
+
+  { method: "GET", path: "/dashboard/uploadimage/{id}", config: dashboardController.showUploadImageForm },
+  { method: "POST", path: "/dashboard/uploadimage/{id}", config: dashboardController.uploadImage },
+  { method: "GET", path: "/dashboard/deleteimage/{id}", config: dashboardController.deleteImage },
+
   { method: "POST", path: "/dashboard/addplacemark", config: dashboardController.addPlacemark },
   { method: "GET", path: "/dashboard/deleteplacemark/{id}", config: dashboardController.deletePlacemark },
   { method: "GET", path: "/dashboard/updateplacemark/{id}", config: dashboardController.showUpdatePlacemarkForm },
   { method: "POST", path: "/dashboard/updateplacemark/{id}", config: dashboardController.updatePlacemark },
+  
+  { method: "GET", path: "/{param*}", handler: { directory: { path: "./public" } }, options: { auth: false } }
 ];

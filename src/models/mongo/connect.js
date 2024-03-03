@@ -1,6 +1,7 @@
 import * as dotenv from "dotenv";
 import Mongoose from "mongoose";
 
+// connect to the MongoDB database
 export function connectMongo() {
   dotenv.config();
 

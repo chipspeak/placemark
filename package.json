@@ -4,32 +4,41 @@
   "description": "",
   "main": "src/server.js",
   "type": "module",
+  
+  "engine":{
+  "node": ">=16"
+  },
+  
   "scripts": {
     "start": "node src/server.js",
     "lint": "./node_modules/.bin/eslint . --ext .js",
     "test": "mocha --ui tdd test/**/*.js -exit",
     "dev": "nodemon src/server.js"
-  
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chipspeak/playtime.git"
+    "url": "git+https://github.com/chipspeak/placemark"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/chipspeak/playtime/issues"
+    "url": "https://github.com/chipspeak/placemark/issues"
   },
-  "homepage": "https://github.com/chipspeak/playtime#readme",
+  "homepage": "https://github.com/chipspeak/placemark#readme",
   "dependencies": {
     "@hapi/boom": "^10.0.1",
     "@hapi/cookie": "^12.0.1",
     "@hapi/hapi": "^21.3.2",
+    "@hapi/inert": "^7.1.0",
     "@hapi/vision": "^7.0.3",
+    "cloudinary": "^2.0.2",
     "dotenv": "^16.3.2",
     "eslint": "^8.56.0",
     "handlebars": "^4.7.8",
+    "hapi-auth-jwt2": "^10.5.1",
+    "hapi-swagger": "^17.2.1",
     "joi": "^17.12.0",
+    "jsonwebtoken": "^9.0.2",
     "lowdb": "^7.0.1",
     "mongoose": "^8.1.1",
     "uuid": "^9.0.1"

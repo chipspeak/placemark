@@ -1,0 +1,132 @@
+{{> admin-menu active="analytics"}}
+
+<div class="columns is-multiline">
+	<!-- card for total users -->
+	<div class="column is-one-third">
+		<div class="card">
+			<div class="card-content has-text-centered">
+				<p class="is-size-1 has-text-warning">
+					<i class="fa-solid fa-users-between-lines"></i>
+				</p>
+			</div>
+			<footer class="card-footer has-background-dark">
+				<p class="card-footer-item has-text-white">
+					Total Users
+				</p>
+				<p class="card-footer-item has-text-white">
+					{{users}}
+				</p>
+			</footer>
+		</div>
+	</div>
+
+	<!-- card for average placemarks per user -->
+	<div class="column is-one-third">
+		<div class="card">
+			<div class="card-content has-text-centered">
+				<p class="is-size-1 has-text-warning">
+					<i class="fa-solid fa-gauge-simple"></i>
+				</p>
+			</div>
+			<footer class="card-footer has-background-dark">
+				<p class="card-footer-item has-text-white">
+					Average Placemarks Per User
+				</p>
+				<p class="card-footer-item has-text-white">
+					{{averagePlacemarksPerUser}}
+				</p>
+			</footer>
+		</div>
+	</div>
+
+	<!-- card for most active user -->
+	<div class="column is-one-third">
+		<div class="card">
+			<div class="card-content has-text-centered">
+				<p class="is-size-1 has-text-warning">
+					<i class="fa-solid fa-chart-line"></i>
+				</p>
+			</div>
+			<footer class="card-footer has-background-dark">
+				<p class="card-footer-item has-text-white">
+					Most Active User
+				</p>
+				<p class="card-footer-item has-text-white">
+					{{mostActiveUser}}
+				</p>
+			</footer>
+		</div>
+	</div>
+
+	<!-- card for total placemarks -->
+	<div class="column is-one-third">
+		<div class="card">
+			<div class="card-content has-text-centered">
+				<p class="is-size-1 has-text-warning">
+					<i class="fa-solid fa-globe"></i>
+				</p>
+			</div>
+			<footer class="card-footer has-background-dark">
+				<p class="card-footer-item has-text-white">
+					Total Placemarks
+				</p>
+				<p class="card-footer-item has-text-white">
+					{{placemarks}}
+				</p>
+			</footer>
+		</div>
+	</div>
+
+	<!-- card for most popular category -->
+	<div class="column is-one-third">
+		<div class="card">
+			<div class="card-content has-text-centered">
+				<p class="is-size-1 has-text-warning">
+					<i class="fa-solid fa-fire-flame-curved"></i>
+				</p>
+			</div>
+			<footer class="card-footer has-background-dark">
+				<p class="card-footer-item has-text-white">
+					Most Popular Category
+				</p>
+				<p class="card-footer-item has-text-white">
+					{{mostPopularCategory}}
+				</p>
+			</footer>
+		</div>
+	</div>
+
+	<!-- card for placemarks per category -->
+	<div class="column is-one-third">
+		<div class="card">
+			<div class="card-content has-text-centered">
+				<p class="is-size-1 has-text-warning">
+					<i class="fa-solid fa-list"></i>
+				</p>
+			</div>
+			<footer class="card-footer has-background-dark">
+				<div class="card-footer-item has-text-white">
+					Placemarks per Category
+				</div>
+				<div class="card-footer-item has-text-white">
+					<div class="dropdown is-hoverable"> <!-- Use is-hoverable for dropdown on hover -->
+						<div class="dropdown-trigger">
+							<button class="button is-dark" aria-haspopup="true" aria-controls="dropdown-menu">
+								<span>Categories</span>
+								<span class="icon is-small">
+									<i class="fas fa-angle-down" aria-hidden="true"></i>
+								</span>
+							</button>
+						</div>
+						<div class="dropdown-menu" id="dropdown-menu" role="menu">
+							<div class="dropdown-content">
+								{{#each placemarksPerCategory}}
+								<a href="#" class="dropdown-item">{{category}}: {{count}}</a>
+								{{/each}}
+							</div>
+						</div>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</div>
