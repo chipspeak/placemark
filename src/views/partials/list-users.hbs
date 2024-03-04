@@ -42,3 +42,12 @@
     </div>
   {{/if}}
 </div>
+
+<!-- script to hide the element which has its id passed when the event occurs (mouse click on down arrow in above dropdown card details) -->
+<script>
+  function toggleCollapse(event, id) {
+    event.preventDefault();
+    const content = document.getElementById(id);
+    content.classList.toggle('is-hidden');
+  }
+</script>

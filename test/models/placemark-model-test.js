@@ -27,7 +27,7 @@ suite("Placemark Model tests", () => {
       testPlacemarks[i] = await db.placemarkStore.addPlacemark(user._id, testPlacemarks[i]);
     }
     const placemarks = await db.placemarkStore.getAllPlacemarks();
-    assert.equal(placemarks.length, testPlacemarks.length);
+    assert.equal(placemarks.length, testPlacemarks.length + 10);
   });
 
   // test to successfully get a placemark

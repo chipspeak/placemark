@@ -1,11 +1,25 @@
 {
   "users": [
     {
-      "firstName": "Maggie",
+      "firstName": "Homer",
       "lastName": "Simpson",
-      "email": "maggie@simpson.com",
+      "email": "homer@simpson.com",
       "password": "secret",
-      "_id": "2fa9dd4e-1d48-4ff8-98d8-0c06bdbfcc2c"
+      "_id": "5d32f8df-4e54-4311-8bb2-66b046e3884a"
+    },
+    {
+      "firstName": "Marge",
+      "lastName": "Simpson",
+      "email": "marge@simpson.com",
+      "password": "secret",
+      "_id": "38c2fba4-6bb8-4b08-b1df-1470e9cd93a1"
+    },
+    {
+      "firstName": "Bart",
+      "lastName": "Simpson",
+      "email": "bart@simpson.com",
+      "password": "secret",
+      "_id": "9193a4c2-9ea5-4f6e-8c29-13036f2008be"
     }
   ],
   "placemarks": [
@@ -16,8 +30,8 @@
       "latitude": "53.381290",
       "longitude": "-6.591850",
       "category": "River",
-      "_id": "e1226aa3-a615-4de8-a02d-6bfcac549e28",
-      "userId": "2fa9dd4e-1d48-4ff8-98d8-0c06bdbfcc2c"
+      "_id": "7aa1c909-c9a6-4af5-a223-57d928384fc0",
+      "userId": "4d9b1385-9bdf-4111-a59a-dbfb5af2ee87"
     }
   ]
 }

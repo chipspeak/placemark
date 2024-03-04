@@ -1,0 +1,27 @@
+<!--leaflet Map-->
+{{#if placemarks}}
+  <div class="content box">
+    <div id="map" style="width: 100%; height: 400px;"></div>
+  </div>
+{{/if}}
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script>
+  const map = L.map('map').setView([53.3498, -6.2603], 5);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap'
+  }).addTo(map); 
+
+  // creating a marker for each placemark and adding it to the map
+  let marker, circle, zoomed; 
+  {{#each placemarks}}
+  marker = L.marker([{{latitude}}, {{longitude}}], {title: "{{title}}"});
+  // adding a popup to the marker that displays the placemark title and image if it exists
+  marker.bindPopup("<h1><strong>{{title}}</strong></h1>" + 
+                   "{{#if img}}" +
+                   "<img src='{{img}}' alt='Placemark Image' style='width: 100%; height: auto;'>" +
+                   "{{/if}}");
+  marker.addTo(map);
+  {{/each}}
+</script>

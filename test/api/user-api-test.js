@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import { assertSubset } from "../test-utils.js";
 import { placemarkService } from "./placemark-service.js";
-import { maggie, maggieCreds, testUsers, testAdminCreds } from "../fixtures.js";
+import { maggie, maggieCreds, testUsers, testAdminCreds, testPlacemark } from "../fixtures.js";
 import { db } from "../../src/models/db.js";
 
 const users = new Array(testUsers.length);
@@ -35,11 +35,16 @@ suite("User API tests", () => {
     await placemarkService.authenticate(testAdminCreds);
     let returnedUsers = await placemarkService.getAllUsers();
     assert.equal(returnedUsers.length, 4);
-    await placemarkService.deleteAllUsers();
     await placemarkService.createUser(maggie);
     await placemarkService.authenticate(maggieCreds);
+    await placemarkService.createPlacemark(testPlacemark);
+    await placemarkService.authenticate(testAdminCreds);
+    await placemarkService.deleteAllUsers();
     returnedUsers = await placemarkService.getAllUsers();
-    assert.equal(returnedUsers.length, 1);
+    assert.equal(returnedUsers.length, 0);
+    // added to check that user deletion prompted placemark deletion
+    const returnedPlacemarks = await placemarkService.getAllPlacemarks();
+    assert.equal(returnedPlacemarks.length, 0);
   });
 
   // test to delete all users - should fail due to user vs admin creds
