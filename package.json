@@ -4,11 +4,6 @@
   "description": "",
   "main": "src/server.js",
   "type": "module",
-  
-  "engine":{
-  "node": ">=16"
-  },
-  
   "scripts": {
     "start": "node src/server.js",
     "lint": "./node_modules/.bin/eslint . --ext .js",
