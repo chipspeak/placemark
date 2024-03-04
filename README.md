@@ -5,8 +5,8 @@ This application was created for a Full Stack Development module on the HDip in 
 
 ## Features
 
-- Create, view, update and release individual placemarks via the application or API
-- Add and update images to placemarks that will be viewable on the website
+- Create, view, update and delete placemarks via the application or API
+- Add and update images to the placemarks for viewing within the application
 - Added placemarks are viewable on a map at the bottom of the dashboard with images features when clicking on the placemarks
 - Users can view placemarks in their entirety on the dashboard or by category using the appropriate tab and selection
 - The administrator can view all current users and analytics relating to their placemarks in addition to deleting users as needed
