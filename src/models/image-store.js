@@ -28,8 +28,15 @@ export const imageStore = {
     return response.url;
   },
 
-  // function to delete an image
+  // function to delete an image (if it exists in Cloudinary as we have images in the oublic folder that we don't want to delete)
   deleteImage: async function(img) {
-    await cloudinary.v2.uploader.destroy(img, {});
+    // check if the image name contains "cloudinary"
+    if (img.includes("cloudinary")) {
+      // if it does, delete the image from Cloudinary
+      await cloudinary.v2.uploader.destroy(img, {});
+    } else {
+      // if not, we log a message to the console
+      console.log("Image not stored on Cloudinary, skipping deletion.");
+    }
   }
 };

@@ -5,6 +5,7 @@ export const aboutController = {
       const viewData = {
         title: "About Placemark",
       };
+      console.log("showing about view...");
       return h.view("about-view", viewData);
     },
   },

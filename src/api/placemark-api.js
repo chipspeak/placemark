@@ -13,6 +13,11 @@ export const placemarkApi = {
       strategy: "jwt",
     },
     handler: async function (request, h) {
+      const decodedToken = decodeToken(request.headers.authorization);
+      // check the role of the user and throw error if they are not an admin
+      if (decodedToken.role !== "admin") {
+        return Boom.forbidden("Only admins can view all placemarks");
+      }
       try {
         const placemarks = await db.placemarkStore.getAllPlacemarks();
         return placemarks;

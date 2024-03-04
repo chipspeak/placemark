@@ -12,6 +12,10 @@ export const userApi = {
       strategy: "jwt",
     },
     handler: async function (request, h) {
+      const decodedToken = decodeToken(request.headers.authorization);
+      if (decodedToken.role !== "admin") {
+        return Boom.forbidden("Only admins can view all users");
+      }
       try {
         const users = await db.userStore.getAllUsers();
         return users;
@@ -100,7 +104,7 @@ export const userApi = {
     tags: ["api"],
     description: "Update a user",
     notes: "Returns the updated user",
-    validate: { payload: UserSpec, params: { id: IdSpec }, failAction: validationError },
+    validate: { payload: UserSpec, failAction: validationError },
     response: { schema: UserSpecPlus, failAction: validationError },
   },
       
@@ -116,6 +120,7 @@ export const userApi = {
         return Boom.forbidden("Only admins can delete all users");
       }
       try {
+        await db.placemarkStore.deleteAllPlacemarks();
         await db.userStore.deleteAll();
         return h.response().code(204);
       } catch (err) {
