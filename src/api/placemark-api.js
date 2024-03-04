@@ -13,6 +13,11 @@ export const placemarkApi = {
       strategy: "jwt",
     },
     handler: async function (request, h) {
+      const decodedToken = decodeToken(request.headers.authorization);
+      // check the role of the user and throw error if they are not an admin
+      if (decodedToken.role !== "admin") {
+        return Boom.forbidden("Only admins can view all placemarks");
+      }
       try {
         const placemarks = await db.placemarkStore.getAllPlacemarks();
         return placemarks;
@@ -94,6 +99,11 @@ export const placemarkApi = {
       strategy: "jwt",
     },
     handler: async function (request, h) {
+      const decodedToken = decodeToken(request.headers.authorization);
+      // check the role of the user and throw error if they are not an admin
+      if (decodedToken.role !== "admin") {
+        return Boom.forbidden("Only admins can delete all placemarks");
+      }
       try {
         await db.placemarkStore.deleteAllPlacemarks();
         return h.response().code(204);
@@ -113,6 +123,7 @@ export const placemarkApi = {
     handler: async function (request, h) {
       try {
         const placemark = await db.placemarkStore.getPlacemarkById(request.params.id);
+        console.log(placemark);
         if (!placemark) {
           return Boom.notFound("No placemark with this id");
         }

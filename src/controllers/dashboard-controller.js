@@ -14,6 +14,7 @@ export const dashboardController = {
         user: loggedInUser,
         placemarks: placemarks,
       };
+      console.log("showing dashboard view...")
       return h.view("dashboard-view", viewData);
     },
   },
@@ -37,6 +38,7 @@ export const dashboardController = {
         longitude: request.payload.longitude,
         category: request.payload.category,
       };
+      console.log("adding new placemark: ", newPlacemark);
       await db.placemarkStore.addPlacemark(loggedInUser._id, newPlacemark);
       return h.redirect("/dashboard");
     },
@@ -70,6 +72,7 @@ export const dashboardController = {
         longitude: request.payload.longitude,
         category: request.payload.category,
       };
+      console.log("updating placemark with id: ", oldPlacemark._id);
       await db.placemarkStore.updatePlacemark(oldPlacemark._id, updatedPlacemark);
       return h.redirect("/dashboard");
     },
@@ -90,6 +93,7 @@ export const dashboardController = {
           placemark.img = url;
           // update the placemark with the image URL parameter
           await db.placemarkStore.updatePlacemarkImage(placemark._id, url);
+          console.log("image uploaded and placemark updated with image URL: ", url);
         }
         return h.redirect("/dashboard");
       } catch (err) {
@@ -110,6 +114,7 @@ export const dashboardController = {
     handler: async function (request, h) {
       const placemarkId = request.params.id;
       const placemark = await db.placemarkStore.getPlacemarkById(placemarkId);
+      console.log("showing update placemark form...")
       return h.view("partials/update-placemark", { placemark });
     },
   },
@@ -119,6 +124,7 @@ export const dashboardController = {
     handler: async function (request, h) {
       const placemarkId = request.params.id;
       const placemark = await db.placemarkStore.getPlacemarkById(placemarkId);
+      console.log("showing upload image form...")
       return h.view("partials/placemark-image", { placemark });
     },
   },
@@ -127,6 +133,7 @@ export const dashboardController = {
   showProfile: {
     handler: async function (request, h) {
       const loggedInUser = request.auth.credentials;
+      console.log("showing profile view...")
       return h.view("profile-view", { user: loggedInUser });
     },
   },
@@ -141,9 +148,9 @@ export const dashboardController = {
       if (placemark.img) {
         const imgURLParts = placemark.img.split("/");
         const publicId = imgURLParts[imgURLParts.length - 1].split(".")[0]; // removing the extension by turning the URL into an array delimited by the . and then removing the last element
+        console.log("deleting image from database -> publicId: ", publicId)
         await imageStore.deleteImage(publicId);
       }
-      // using split to deliminate the image URL and get the image name as the final part of the URL (i.e length -1)
       await db.placemarkStore.deletePlacemark(placemarkId);
       return h.redirect("/dashboard");
     },
@@ -160,6 +167,7 @@ export const dashboardController = {
       // removing the extension by turning the URL into an array delimited by the . and then removing the last element
       const publicId = imgURLParts[imgURLParts.length - 1].split(".")[0];
       // passing the public ID to the deleteImage function in the imageStore
+      console.log("deleting placemark image -> publicId: ", publicId)
       await imageStore.deleteImage(publicId);
       // setting the image URL to null and updating the placemark via the updatePlacemarkImage function in the placemarkStore
       placemark.img = null;

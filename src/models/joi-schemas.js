@@ -8,12 +8,12 @@ export const UserCredsSpec = Joi.object()
     email: Joi.string().email().example("homer@simpson.com").required(),
     password: Joi.string().example("secret").required(),
   })
-  .label("UserCredentials");
+  .label("User Credentials");
 
 export const UserSpec = UserCredsSpec.keys({
   firstName: Joi.string().example("Homer").required(),
   lastName: Joi.string().example("Simpson").required(),
-}).label("UserDetails");
+}).label("User");
 
 export const UserUpdateSpec = Joi.object()
   .keys({
@@ -22,14 +22,14 @@ export const UserUpdateSpec = Joi.object()
     email: Joi.string().email().example("homer@simpsons.com").required(),
     password: Joi.string().example("secret").required(),
   })
-  .label("UserUpdate");
+  .label("User Update");
 
 export const UserSpecPlus = UserSpec.keys({
   _id: IdSpec,
   __v: Joi.number(),
-}).label("UserDetailsPlus");
+}).label("Full User Details");
 
-export const UserArray = Joi.array().items(UserSpecPlus).label("UserArray");
+export const UserArray = Joi.array().items(UserSpecPlus).label("User Array");
 
 // array of allowed placemarks for user in the placemarks schema
 const allowedCategories = ["Park", "Castle", "Ancient Ruin", "Walk", "Beach", "River", "Lake", "Waterfall", "Hike", "Cave", "Ringfort", "Dolmen", "Monument", "National Park"];
@@ -46,20 +46,21 @@ export const PlacemarkSpec = Joi.object()
       .example("Park")
       .valid(...allowedCategories)
       .required(),
+    img: Joi.string().example("phoenix-park.jpg")
   })
-  .label("PlacemarkDetails");
+  .label("Placemark Details");
 
 export const PlacemarkPlusSpec = PlacemarkSpec.keys({
   userId: IdSpec,
   _id: IdSpec,
   __v: Joi.number(),
-}).label("PlacemarkDetailsPlus");
+}).label("Expanded Placemark Details");
 
-export const PlacemarkArraySpec = Joi.array().items(PlacemarkPlusSpec).label("PlacemarkArray");
+export const PlacemarkArraySpec = Joi.array().items(PlacemarkPlusSpec).label("Placemark Array");
 
 export const JwtAuth = Joi.object()
   .keys({
     success: Joi.boolean().example("true").required(),
     token: Joi.string().example("eyJhbGciOiJND.g5YmJisIjoiaGYwNTNjAOhE.gCWGmY5-YigQw0DCBo").required(),
   })
-  .label("JwtAuth");
+  .label("Jwt Authentification");

@@ -26,6 +26,7 @@ export const adminDashboardController = {
         title: "Admin Dashboard",
         users: updatedUsers,
       };
+      console.log("showing admin dashboard view...");
       return h.view("admin-dashboard-view", viewData);
     },
   },
@@ -56,7 +57,7 @@ export const adminDashboardController = {
         averagePlacemarksPerUser: averagePlacemarksPerUser,
         mostActiveUser: mostActiveUser,
       };
-
+      console.log("showing analytics view...");
       return h.view("analytics-view", viewData);
     },
   },

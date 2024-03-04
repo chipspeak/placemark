@@ -15,6 +15,7 @@ export const categoryController = {
         user: loggedInUser,
         placemarks: placemarks,
       };
+      console.log("showing category view...");
       return h.view("category-view", viewData);
     },
   },
