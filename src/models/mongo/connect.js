@@ -9,6 +9,8 @@ const seedLib = mongooseSeeder.default;
 async function seed() {
   const seeder = seedLib(Mongoose);
   const dbData = await seeder.seed(seedData, { dropDatabase: false, dropCollections: true });
+  console.log("Database is empty. Seeding data...");
+  console.log("Seeded data: ");
   console.log(dbData);
 }
 
@@ -28,8 +30,12 @@ export function connectMongo() {
     console.log("database disconnected");
   });
 
-  db.once("open", function () {
+  db.once("open", async function () {
     console.log(`database connected to ${this.name} on ${this.host}`);
-    seed();
+    const User = Mongoose.model("User");
+    const userCount = await User.countDocuments();
+    if (userCount === 0) {
+      seed();
+    }
   });
 }
