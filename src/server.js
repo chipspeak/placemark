@@ -21,13 +21,13 @@ const __dirname = path.dirname(__filename);
 const result = dotenv.config();
 if (result.error) {
   console.log(result.error.message);
-  // process.exit(1);
+  process.exit(1);
 }
 
 const swaggerOptions = {
   info: {
     title: "Placemark API",
-    version: "0.1",
+    version: "1.0",
   },
   securityDefinitions: {
     jwt: {
@@ -42,13 +42,15 @@ const swaggerOptions = {
 async function init() {
   const server = Hapi.server({
     port: process.env.PORT || 3000,
+    routes: { 
+      cors: true
+    },
   });
 
   await server.register(Inert);
   await server.register(Vision);
   await server.register(Cookie);
   await server.register(jwt);
-
   await server.register([
     Inert,
     Vision,
