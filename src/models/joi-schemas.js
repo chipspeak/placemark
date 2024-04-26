@@ -46,7 +46,7 @@ export const PlacemarkSpec = Joi.object()
       .example("Park")
       .valid(...allowedCategories)
       .required(),
-    img: Joi.string().example("phoenix-park.jpg")
+    img: Joi.string().example("phoenix-park.jpg").optional()
   })
   .label("Placemark Details");
 
@@ -55,6 +55,8 @@ export const PlacemarkPlusSpec = PlacemarkSpec.keys({
   _id: IdSpec,
   __v: Joi.number(),
 }).label("Expanded Placemark Details");
+
+export const ImageSpec = Joi.string();
 
 export const PlacemarkArraySpec = Joi.array().items(PlacemarkPlusSpec).label("Placemark Array");
 
