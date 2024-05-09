@@ -4,6 +4,7 @@ import { userApi } from "./api/user-api.js";
 export const apiRoutes = [
   { method: "GET", path: "/api/users", config: userApi.find },
   { method: "POST", path: "/api/users", config: userApi.create },
+
   { method: "DELETE", path: "/api/users", config: userApi.deleteAll },
   { method: "DELETE", path: "/api/users/{id}", config: userApi.deleteOne },
   { method: "GET", path: "/api/users/{id}", config: userApi.findOne },
@@ -13,6 +14,12 @@ export const apiRoutes = [
 
   { method: "GET", path: "/api/placemarks", config: placemarkApi.find },
   { method: "GET", path: "/api/placemarks/{id}", config: placemarkApi.findOne },
+
+  { method: "POST", path: "/api/getWeather", config: placemarkApi.getWeather },
+  { method: "POST", path: "/api/getWeatherForecast", config: placemarkApi.getWeatherForecast },
+  
+  { method: "POST", path: "/api/users/createViaFirebase", config: userApi.createViaFirebase },
+  
   { method: "PUT", path: "/api/placemarks/{id}", config: placemarkApi.update },
   { method: "POST", path: "/api/users/placemarks", config: placemarkApi.create },
   { method: "DELETE", path: "/api/placemarks", config: placemarkApi.deleteAll },

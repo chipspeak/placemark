@@ -1,8 +1,13 @@
 import Boom from "@hapi/boom";
 import { db } from "../models/db.js";
+import { UserSpec, UserSpecPlus, IdSpec, UserArray, JwtAuth, UserCredsSpec, AuthSpec, FirebaseUserCreds, FirebaseSpecPlus } from "../models/joi-schemas.js";
+import { validationError } from "./logger.js";
+import { createToken, validate, decodeToken } from "./jwt-utils.js";
+import axios from "axios";
 import { UserSpec, UserSpecPlus, IdSpec, UserArray, JwtAuth, UserCredsSpec } from "../models/joi-schemas.js";
 import { validationError } from "./logger.js";
 import { createToken, validate, decodeToken } from "./jwt-utils.js";
+
 
 // user API export
 export const userApi = {
@@ -13,6 +18,7 @@ export const userApi = {
     },
     handler: async function (request, h) {
       const decodedToken = decodeToken(request.headers.authorization);
+
       if (decodedToken.role !== "admin") {
         return Boom.forbidden("Only admins can view all users");
       }
@@ -72,6 +78,30 @@ export const userApi = {
     validate: { payload: UserSpec, failAction: validationError },
     response: { schema: UserSpecPlus, failAction: validationError },
   },
+
+  
+    // function to create a new user
+  createViaFirebase: {
+    auth: false,
+    handler: async function (request, h) {
+      try {
+        const user = await db.userStore.addFirebaseUser(request.payload);
+        if (user) {
+          return h.response(user).code(201);
+        }
+        return Boom.badImplementation("error creating user");
+      } catch (err) {
+        return Boom.serverUnavailable("Database Error");
+      }
+    },
+    tags: ["api"],
+    description: "Create a User",
+    notes: "Returns the newly created user",
+    validate: { payload: FirebaseUserCreds, failAction: validationError },
+    response: { schema: FirebaseSpecPlus, failAction: validationError },
+  },
+  
+
 
   // function to update a user
   update: {
@@ -182,8 +212,14 @@ export const userApi = {
         }
         // Generate JWT token for authenticated user
         const token = createToken(user);
+
+        return h.response({ success: true, token: token, _id: user._id, email: user.email }).code(201);
+      } catch (err) {
+        console.log(err);
+
         return h.response({ success: true, token: token }).code(201);
       } catch (err) {
+
         return Boom.serverUnavailable("Database Error");
       }
     },

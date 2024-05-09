@@ -11,6 +11,16 @@ const userSchema = new Schema({
   password: String,
 });
 
+
+const firebaseUserSchema = new Schema({
+  email: String,
+})
+
+firebaseUserSchema.statics.findByEmail = function (email) {
+  return this.findOne({ email: email});
+};
+
+
 userSchema.statics.findByEmail = function (email) {
   return this.findOne({ email: email });
 };
@@ -24,3 +34,7 @@ userSchema.methods.comparePassword = function (candidatePassword) {
 };
 
 export const User = Mongoose.model("User", userSchema);
+
+
+export const FirebaseUser = Mongoose.model("FirebaseUser", firebaseUserSchema);
+

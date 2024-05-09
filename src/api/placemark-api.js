@@ -5,6 +5,11 @@ import { PlacemarkSpec, PlacemarkPlusSpec, IdSpec, PlacemarkArraySpec } from "..
 import { validationError } from "./logger.js";
 import { decodeToken, validate } from "./jwt-utils.js";
 
+import axios from "axios";
+import dotenv from "dotenv";
+
+dotenv.config();
+
 // placemark API export
 export const placemarkApi = {
   // function to find all placemarks
@@ -91,6 +96,7 @@ export const placemarkApi = {
     response: { schema: PlacemarkPlusSpec, failAction: validationError },
   },
   
+
   // function to delete all placemarks
   deleteAll: {
     auth: {
@@ -112,6 +118,7 @@ export const placemarkApi = {
     tags: ["api"],
     description: "Delete all placemarks",
   },
+
 
   // function to delete a single placemark by id
   deleteOne: {
@@ -179,4 +186,96 @@ update: {
   },
   response: { emptyStatusCode: 204, failAction: validationError },
 },
+
+
+  
+getWeather: {
+  auth: {
+    strategy: "jwt",
+  },
+  handler: async function (request, h) {
+    // Decode and validate the JWT token
+    const decodedToken = decodeToken(request.headers.authorization);
+    const validationResult = await validate(decodedToken, request);
+    if (!validationResult.isValid) {
+      return Boom.unauthorized("Invalid credentials");
+    }
+
+    // Extract the placemark from the request payload
+    const placemark = request.payload;
+
+    // Extract latitude and longitude from the placemark
+    const latitude = placemark.latitude;
+    const longitude = placemark.longitude;
+
+
+    // Make an API call to the OpenWeather API to retrieve the current weather data
+    try {
+      const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather`, {
+        params: {
+          lat: latitude,
+          lon: longitude,
+          appid: process.env.weatherApi,
+          units: "metric",
+        },
+      });
+      console.log(response.data);
+      // Return the weather data
+      return response.data;
+    } catch (error) {
+      console.error("Failed to fetch weather data:", error);
+      return Boom.serverUnavailable("Failed to fetch weather data");
+    }
+  },
+  tags: ["api"],
+  description: "Retrieve current weather data for a given placemark",
+  notes: "Returns current weather data based on the latitude and longitude of the provided placemark",
+  validate: { payload: PlacemarkPlusSpec, failAction: validationError },
+  },
+
+
+getWeatherForecast: {
+  auth: {
+    strategy: "jwt",
+  },
+  handler: async function (request, h) {
+    // Decode and validate the JWT token
+    const decodedToken = decodeToken(request.headers.authorization);
+    const validationResult = await validate(decodedToken, request);
+    if (!validationResult.isValid) {
+      return Boom.unauthorized("Invalid credentials");
+    }
+
+    // Extract the placemark from the request payload
+    const placemark = request.payload;
+
+    // Extract latitude and longitude from the placemark
+    const latitude = placemark.latitude;
+    const longitude = placemark.longitude;
+
+
+    // Make an API call to the OpenWeather API to retrieve the current weather data
+    try {
+      const response = await axios.get(`https://api.openweathermap.org/data/2.5/forecast`, {
+        params: {
+          lat: latitude,
+          lon: longitude,
+          appid: process.env.weatherApi,
+          units: "metric",
+        },
+      });
+      console.log(response.data);
+      // Return the weather data
+      return response.data;
+    } catch (error) {
+      console.error("Failed to fetch weather data:", error);
+      return Boom.serverUnavailable("Failed to fetch weather data");
+    }
+  },
+  tags: ["api"],
+  description: "Retrieve 5 day weather forecast for a given placemark",
+  notes: "Returns current weather forecast based on the latitude and longitude of the provided placemark",
+  validate: { payload: PlacemarkPlusSpec, failAction: validationError },
+  },
+
 };

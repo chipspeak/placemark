@@ -64,7 +64,11 @@ export const placemarkMongoStore = {
       throw new Error("Placemark not found");
     }
     // update the img field with the new image URL
+
+    placemark.img.push(imageUrl);
+
     placemark.img = imageUrl;
+
     // save the updated placemark
     const updatedPlacemark = await placemark.save();
     return updatedPlacemark;
