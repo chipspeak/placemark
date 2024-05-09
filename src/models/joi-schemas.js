@@ -29,6 +29,7 @@ export const UserSpecPlus = UserSpec.keys({
   __v: Joi.number(),
 }).label("Full User Details");
 
+
 export const FirebaseUserCreds = Joi.object()
   .keys({
     email: Joi.string().email().example("homer@simpson.com").required(),
@@ -48,6 +49,7 @@ export const AuthSpec = Joi.object()
 }).label("User details returned via auth");
 
 
+
 export const UserArray = Joi.array().items(UserSpecPlus).label("User Array");
 
 // array of allowed placemarks for user in the placemarks schema
@@ -64,8 +66,10 @@ export const PlacemarkSpec = Joi.object()
     category: Joi.string()
       .example("Park")
       .valid(...allowedCategories)
-      .required(),
+
     img: Joi.array().items(Joi.string().example("phoenix-park.jpg")).optional(),
+
+    img: Joi.string().example("phoenix-park.jpg").optional()
   })
   .label("Placemark Details");
 
@@ -82,8 +86,10 @@ export const PlacemarkArraySpec = Joi.array().items(PlacemarkPlusSpec).label("Pl
 export const JwtAuth = Joi.object()
   .keys({
     success: Joi.boolean().example("true").required(),
+
     email: Joi.string().email().required(),
     _id: IdSpec,
+
     token: Joi.string().example("eyJhbGciOiJND.g5YmJisIjoiaGYwNTNjAOhE.gCWGmY5-YigQw0DCBo").required(),
   })
   .label("Jwt Authentification");

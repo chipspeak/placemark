@@ -1,6 +1,5 @@
 import { User } from "./user.js";
 import { FirebaseUser } from "./user.js";
-
 import { placemarkMongoStore } from "./placemark-mongo-store.js";
 
 // export userMongoStore object
@@ -26,7 +25,6 @@ export const userMongoStore = {
     const u = await this.getUserById(userObj._id);
     return u;
   },
-  
 
   // function to get user by email
   async getUserByEmail(email) {
@@ -58,6 +56,7 @@ export const userMongoStore = {
   async deleteAll() {
     await User.deleteMany({});
   },
+
   
     // function to get user by id
   async getUserById(id) {
@@ -84,6 +83,7 @@ export const userMongoStore = {
     const u = await this.getUserById(userObj._id);
     return u;
   },
+
 
   // function to update a user
   async updateUser(userId, updatedUser) {

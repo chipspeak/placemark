@@ -1,0 +1,15 @@
+{{> placemark-brand}}
+<br>
+<nav class="navbar is-transparent">
+  <div class="navbar-menu is-hoverable">
+    <div class="navbar-end">
+      <a id="admin" class="button is-success mx-2 is-outlined" href="/admin">Admin<i class="fa-solid fa-user-tie pl-2"></i></a>
+      <a id="analytics" class="button is-success mx-2 is-outlined" href="admin/showanalytics">Analytics<i class="fa-solid fa-chart-simple pl-2"></i></i></a>
+      <a id="login" class="button is-success mx-2 is-outlined" href="/logout">Logout<i class="fa-solid fa-users pl-2"></i></a>
+    </div>
+  </div>
+</nav>
+<script>
+  document.getElementById("{{active}}").classList.add("is-focused");
+</script>
+<br>

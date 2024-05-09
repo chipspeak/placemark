@@ -1,0 +1,50 @@
+{{> menu active="dashboard"}}
+
+<div class="card">
+  <div class="card-content">
+    <figure class="image is-256x256">
+      <img src={{placemark.img}}>
+    </figure>
+  </div>
+  <div class="card-content">
+    <form action="/dashboard/uploadimage/{{placemark._id}}" method="POST" enctype="multipart/form-data">
+      <div id="file-select" class="file has-name is-fullwidth">
+        <label class="file-label">
+          <input class="file-input" name="imagefile" type="file" name="resume" accept="image/png, image/jpeg">
+          <span class="file-cta">
+            <span class="file-icon">
+              <i class="fas fa-upload"></i>
+            </span>
+            <span class="file-label">
+              Choose an image to upload...
+            </span>
+          </span>
+          <span class="file-name"></span>
+        </label>
+        <button type="submit" class="button is-success is-outlined is-hoverable pl-5">Upload<i class="fa-solid fa-cloud-arrow-up pl-3"></i></button></button>
+      </div>
+    </form>
+    <!-- if there is an image the user is presented with a delete button, otherwise it will just be the upload button -->
+    {{#if placemark.img}}
+    <div class="delete-button-container is-aligned-right pt-2">
+      <a href="/dashboard/deleteimage/{{placemark._id}}" class="button is-danger is-outlined is-hoverable pr-5 pl-5" onclick="return confirm('Are you sure you want to delete this image?');">Delete<i class="fa-solid fa-trash pl-4"></i></a>
+    </div>
+    {{/if}}
+  </div>
+</div>
+
+<script>
+  const fileInput = document.querySelector(".file-input");
+  fileInput.onchange = () => {
+    if (fileInput.files.length > 0) {
+      const fileName = document.querySelector(".file-name");
+      fileName.textContent = fileInput.files[0].name;
+    }
+  };
+</script>
+
+<style>
+  .delete-button-container {
+    text-align: right;
+  }
+</style>

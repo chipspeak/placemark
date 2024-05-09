@@ -7,7 +7,9 @@ import path from "path";
 import Joi from "joi";
 import jwt from "hapi-auth-jwt2";
 import HapiSwagger from "hapi-swagger";
+
 import * as disinfect from "disinfect"
+
 import { fileURLToPath } from "url";
 import Handlebars from "handlebars";
 import { webRoutes } from "./web-routes.js";
@@ -60,6 +62,7 @@ async function init() {
       options: swaggerOptions,
     },
   ]);
+
   await server.register({
   plugin: disinfect,
   options: {
@@ -68,6 +71,7 @@ async function init() {
       disinfectPayload: true
   }
 });
+
 
   server.validator(Joi);
 

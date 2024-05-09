@@ -4,10 +4,12 @@ import { db } from "../models/db.js";
 import { PlacemarkSpec, PlacemarkPlusSpec, IdSpec, PlacemarkArraySpec } from "../models/joi-schemas.js";
 import { validationError } from "./logger.js";
 import { decodeToken, validate } from "./jwt-utils.js";
+
 import axios from "axios";
 import dotenv from "dotenv";
 
 dotenv.config();
+
 // placemark API export
 export const placemarkApi = {
   // function to find all placemarks
@@ -94,7 +96,7 @@ export const placemarkApi = {
     response: { schema: PlacemarkPlusSpec, failAction: validationError },
   },
   
-  
+
   // function to delete all placemarks
   deleteAll: {
     auth: {
@@ -117,7 +119,7 @@ export const placemarkApi = {
     description: "Delete all placemarks",
   },
 
-  
+
   // function to delete a single placemark by id
   deleteOne: {
     auth: {
@@ -184,6 +186,7 @@ update: {
   },
   response: { emptyStatusCode: 204, failAction: validationError },
 },
+
 
   
 getWeather: {
@@ -274,4 +277,5 @@ getWeatherForecast: {
   notes: "Returns current weather forecast based on the latitude and longitude of the provided placemark",
   validate: { payload: PlacemarkPlusSpec, failAction: validationError },
   },
+
 };
